@@ -1,6 +1,0 @@
-stages:
-deploy:
-  stage: deploy
-  script: 
-   - lean switch IFTWX
-   - lean deploy
