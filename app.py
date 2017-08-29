@@ -5,7 +5,6 @@ from datetime import datetime
 from flask import Flask
 
 app = Flask(__name__)
-sockets = Sockets(app)
 
 # 动态路由
 @app.route('/gitlab', methods=['POST'])
