@@ -18,9 +18,9 @@ def gitlab_hook():
     if request.method == 'POST':
         print 'Got request:', request.data
         data = json.loads(request.data)
-        if(data['object_kind']=='push')
+        if(data['object_kind']=='push'):
         # gitlab hook data format https://docs.gitlab.com/ce/user/project/integrations/webhooks.html
-            ref = data['refs'].split('/', 2)[-1]
+            ref = data['ref'].split('/', 2)[-1]
 
             commits = data['commits']
             if commits and 'merge' in commits[-1]['message'].lower():
