@@ -1,0 +1,7 @@
+stages:
+deploy:
+  stage: deploy
+  script: 
+   - echo 'deploying'
+   - lean switch IFTX
+   - lean deploy
