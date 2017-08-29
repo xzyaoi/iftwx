@@ -2,6 +2,5 @@ stages:
 deploy:
   stage: deploy
   script: 
-   - echo 'deploying'
-   - lean switch IFTX
+   - lean switch IFTWX
    - lean deploy
