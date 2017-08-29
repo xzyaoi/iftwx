@@ -23,16 +23,13 @@ def gitlab_hook():
             return ''
 
         for commit in commits:
-            task_ids = filter_asana_task_id(commit['message'])
-
-            for task_id in task_ids:
-                message = u'{name} push to repo {repo}/{ref} \n check: {gitlab_url} \n {message}'.format(
-                    name=data['user_name'],
-                    repo=data['repository']['name'],
-                    ref=ref,
-                    message=commit['message'],
-                    gitlab_url=commit['url'])
-                print message
+            message = u'{name} push to repo {repo}/{ref} \n check: {gitlab_url} \n {message}'.format(
+                name=data['user_name'],
+                repo=data['repository']['name'],
+                ref=ref,
+                message=commit['message'],
+                gitlab_url=commit['url'])
+            print message
 
 
         # gitlab does not need feedback
