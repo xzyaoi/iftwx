@@ -34,7 +34,7 @@ def gitlab_hook():
                 return ''
 
             for commit in commits:
-                message = u'{name} push to repo {repo}/{ref} \n check: {gitlab_url} \n {message}'.format(
+                message = u'{name}推送了新的代码到{repo}的{ref}分支 \n 点此链接进入:{gitlab_url} \n 改动信息:{message}'.format(
                     name=data['user_name'],
                     repo=data['repository']['name'],
                     ref=ref,
