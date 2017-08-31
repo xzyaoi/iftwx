@@ -41,5 +41,6 @@ def gitlab_hook():
                     message=commit['message'],
                     gitlab_url=commit['url'])
                 print message
-                requests.get('https://pushbear.ftqq.com/sub?sendkey=804-6507b40121c173ce5caac52b4ed35436&text=gitlab-push&desp='+message)
+                r = requests.get('https://pushbear.ftqq.com/sub?sendkey=804-6507b40121c173ce5caac52b4ed35436&text=代码有新的更新&desp='+message)
+                print r
     return ''
