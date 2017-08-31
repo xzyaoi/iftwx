@@ -7,7 +7,7 @@ import os
 
 import leancloud
 
- from app import app
+from app import app
 from cloud import engine
 
 APP_ID = 'x5G1gBu1xaNkCe21RvLOVgl5-gzGzoHsz'

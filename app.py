@@ -5,8 +5,7 @@ from datetime import datetime
 from flask import Flask
 from flask import request 
 import json
-from wx import *
-
+import requests
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -14,8 +13,7 @@ sys.setdefaultencoding('utf-8')
 app = Flask(__name__)
 
 @app.route('/',methods=['GET'])
-def init_wx():
-    bot.file_helper.send('Hello from wxpy!')
+
 
 # 动态路由
 @app.route('/gitlab', methods=['POST'])
@@ -43,4 +41,5 @@ def gitlab_hook():
                     message=commit['message'],
                     gitlab_url=commit['url'])
                 print message
+                requests.get('https://pushbear.ftqq.com/sub?sendkey=804-6507b40121c173ce5caac52b4ed35436&text=gitlab-push&desp='+message)
     return ''
