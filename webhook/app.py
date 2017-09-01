@@ -14,8 +14,16 @@ app = Flask(__name__)
 
 @app.route('/',methods=['GET'])
 
+# ZTodo Webhook
+@app.route('/ztodo', methods=['POST'])
+def ztodo_hook():
+    return ''
+# Smart Circle Webhook
+@app.route('/mc', methods=['POST'])
 
-# 动态路由
+def mcircle_hook():
+    return ''
+# Gitlab Webhook
 @app.route('/gitlab', methods=['POST'])
 def gitlab_hook():
     if request.method == 'POST':
