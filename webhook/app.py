@@ -5,6 +5,7 @@ from flask import Flask
 from flask import request
 import json
 import requests
+import leancloud
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -13,14 +14,15 @@ app = Flask(__name__)
 
 @app.route('/register',methods=['POST'])
 def register():
-    req = json.loads(request.data)
-    user = leancloud.User()
-    user.set_username(req.username)
-    user.set_password(req.password)
-    user.set_email(req.email)
-    user.sign_up()
-    print 'signed up'
-    return ''
+    if request.method == 'POST':
+        print request.data
+        user = leancloud.User()
+        user.set_username(request.form['username'])
+        user.set_password(request.form['password'])
+        user.set_email(request.form['email'])
+        user.sign_up()
+        print 'signed up'
+        return ''
 
 @app.route('/',methods=['GET'])
 
