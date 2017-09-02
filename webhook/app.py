@@ -1,9 +1,8 @@
 # coding: utf-8
 
 from datetime import datetime
-
 from flask import Flask
-from flask import request 
+from flask import request
 import json
 import requests
 import sys
@@ -11,6 +10,17 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
+
+@app.route('/register',methods=['POST'])
+def register():
+    req = json.loads(request.data)
+    user = leancloud.User()
+    user.set_username(req.username)
+    user.set_password(req.password)
+    user.set_email(req.email)
+    user.sign_up()
+    print 'signed up'
+    return ''
 
 @app.route('/',methods=['GET'])
 
@@ -48,7 +58,5 @@ def gitlab_hook():
                     ref=ref,
                     message=commit['message'],
                     gitlab_url=commit['url'])
-                print message
                 r = requests.get('https://pushbear.ftqq.com/sub?sendkey=804-6507b40121c173ce5caac52b4ed35436&text=代码有新的更新&desp='+message)
-                print r
     return ''
