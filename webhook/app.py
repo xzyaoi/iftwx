@@ -7,6 +7,7 @@ import json
 import requests
 import leancloud
 import sys
+import uuid
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -20,6 +21,8 @@ def register():
         user.set_username(request.form['username'])
         user.set_password(request.form['password'])
         user.set_email(request.form['email'])
+        user.set('sendkey',str(uuid.uuid4()))
+        user.set('sendfrom',request.form['sendfrom'])
         user.sign_up()
         print 'signed up'
         return ''
