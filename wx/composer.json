@@ -1,9 +1,6 @@
 {
     "require": {
-        "slim/slim": "^3.0",
-        "overtrue/wechat": "~4.0"
-    },
-    "require-dev": {
-        "heroku/heroku-buildpack-php": "*"
+        "overtrue/wechat": "~3.1",
+        "parse/php-sdk": "1.2.*"
     }
 }
