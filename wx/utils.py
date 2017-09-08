@@ -21,7 +21,6 @@ def put_follower_into_db():
     followers = client.user.get_followers()
     openids = followers['data']['openid']
     users = client.user.get_batch(openids)
-    print users
     for each in users:
         subscribe=False
         if(each['subscribe']==1):
