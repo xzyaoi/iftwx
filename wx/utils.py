@@ -6,7 +6,7 @@ from wechatpy import WeChatClient
 from config import WX_SETTINGS
 
 # Wechat Config
-client = WeChatClient(WX_SETTINGS['WX_APPID'], REST_API_KEY = None,WX_SETTINGS['WX_APPSECRET'])
+client = WeChatClient(WX_SETTINGS['WX_APPID'], WX_SETTINGS['WX_APPSECRET'])
 
 # Parse Config
 from config import PARSE_SETTINGS
@@ -19,6 +19,12 @@ register(PARSE_SETTINGS['APP_ID'], PARSE_SETTINGS['MASTER_KEY'])
 
 def put_follower_into_db():
     followers = client.user.get_followers()
-    for each in followers['data']['openid']:
-        u = User.signup(each, "123456", wxOpenId=each)
-        print u
+    openids = followers['data']['openid']
+    users = client.user.get_batch(openids)
+    print users
+    for each in users:
+        subscribe=False
+        if(each['subscribe']==1):
+            subscribe=True
+        u = User.signup(each['nickname'], "123456", wxOpenId=each['openid'], province=each['province'],subscribe_time=each['subscribe_time'],headimgurl=each['headimgurl'],isSubscribe=subscribe,city=each['city'],language=each['language'],remark=each['remark'],tags=each['tagid_list'],groupid=each['groupid'],sex=each['sex'],country=each['country'])
+    print 'Finished'
