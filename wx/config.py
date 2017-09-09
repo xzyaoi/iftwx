@@ -9,3 +9,7 @@ PARSE_SETTINGS={
 "APP_ID":"zhulijun-app-id",
 "MASTER_KEY":"an82as3aHDa62IFaJw"
 }
+AIUI_SETTINGS={
+    "APPID":"59b3c077",
+    "ApiKey":"a34dd05cc66347f5a17a107dd5fd1bea"
+}
