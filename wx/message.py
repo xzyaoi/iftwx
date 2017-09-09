@@ -2,6 +2,10 @@
 from wechatpy import parse_message
 from wechatpy.replies import TextReply
 from wechatpy.replies import TransferCustomerServiceReply
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 class WechatMessage(object):
     def __init__(self, message):
@@ -28,13 +32,13 @@ class WechatMessage(object):
         return handler()
     
     def handle_text(self):
-        return self.text_reply('收到啦')
+        return self.text_reply('收到你发来的消息了，内容是: %s' % self.message.content)
 
     def handle_unknown(self):
         return self.text_reply(
-            '助 \n\n'
-            '理 \n\n'
-            '君 \n\n'
+            '助 \n'
+            '理 \n'
+            '君 \n'
         )
 
     def handle_unknown_event(self):
@@ -45,9 +49,9 @@ class WechatMessage(object):
         # self.user.subscribe = True
         # self.user.save(update_fields=['subscribe'])
         return self.text_reply(
-            '助 \n\n'
-            '理 \n\n'
-            '君 \n\n'
+            '助 \n'
+            '理 \n'
+            '君 \n'
             % self.user.get_full_name()
         )
 
