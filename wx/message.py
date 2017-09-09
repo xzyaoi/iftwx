@@ -2,6 +2,7 @@
 from wechatpy import parse_message
 from wechatpy.replies import TextReply
 from wechatpy.replies import TransferCustomerServiceReply
+from user import *
 import sys
 
 reload(sys)
@@ -46,8 +47,7 @@ class WechatMessage(object):
 
     def handle_subscribe_event(self):
         # TODO: Update subscribe status
-        # self.user.subscribe = True
-        # self.user.save(update_fields=['subscribe'])
+        addUser(self.message.source)
         return self.text_reply(
             '助 \n'
             '理 \n'
@@ -65,7 +65,7 @@ class WechatMessage(object):
         self.message.content = getattr(self.message, 'recognition', '')
         if not self.message.content:
             return self.text_reply(
-                '\U0001F648哎呀，看起来微信的语音转文字功能又双叒叕罬蝃抽风了，请重试一遍，或者直接发文字给我~'
+                '识别识别，请重新发送'
             )
         #TODO Do Different Operations
         return self.handle_text()
