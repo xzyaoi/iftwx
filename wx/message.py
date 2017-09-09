@@ -38,8 +38,10 @@ class WechatMessage(object):
         semantic_result = semantic(self.message.content, self.message.source)
         try:
             if(semantic_result['data']['service']=='scheduleX'):
-                reminder_handler(semantic_result,self.message.source)
-                return self.text_reply(semantic_result['data']['answer']['text'])
+                if reminder_handler(semantic_result,self.message.source):
+                    return self.text_reply(semantic_result['data']['answer']['text'])
+                else:
+                    return self.text_reply('你发来的消息: %s , 我暂时无法理解哦' % self.message.content)
         except Exception:
             pass
         return self.text_reply('你发来的消息: %s , 我暂时无法理解哦' % self.message.content)

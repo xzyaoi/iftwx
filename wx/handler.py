@@ -15,9 +15,21 @@ class Reminder(Object):
 
 def reminder_handler(remind_obj,openid):
     try:
-        remind_time = remind_obj['data']['semantic'][0]['slots'][0]['normValue']['suggestDatetime']
+        slots=None
+        remind_time=None
+        remind_content=None
+        for each in remind_obj['data']['semantic']:
+            if each['intent']=='CREATE':
+                slots=each['slots']
+                break
+        for each in slots:
+            if each['name']=='content':
+                remind_content=each['value']
+            elif each['name'] == 'datetime':
+                remind_time = each['normValue']['suggestDatetime']
+            
         remind_user = User.Query.get(wxOpenId=openid)
-        content = remind_obj['data']['text']
+        origintText = remind_obj['data']['text']
         isRepeat = False
         repeatFrequency = None
         try:
@@ -27,8 +39,9 @@ def reminder_handler(remind_obj,openid):
                     repeatFrequency = each['value']
         except Exception:
             pass
-        reminder = Reminder(remindTime=remind_time,remindUser=remind_user, createdBy=remind_user, origin=origintext,isRepeat=isRepeat,repeatFrequency=repeatFrequency)
+        reminder = Reminder(remindTime=remind_time,remindUser=remind_user,remindContent=remind_content, createdBy=remind_user, origin=origintText,isRepeat=isRepeat,repeatFrequency=repeatFrequency)
         reminder.save()
         return True
     except Exception:
+        print 'cannot save reminder handler'
         return False
