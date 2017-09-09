@@ -1,9 +1,16 @@
 from flask import Flask
 from flask import request
 from wechatpy.utils import check_signature
+from parse_rest.connection import register
 from wechatpy.exceptions import InvalidSignatureException
 from config import WX_SETTINGS
+from config import PARSE_SETTINGS
 from message import handle_message
+import os
+
+register(PARSE_SETTINGS['APP_ID'], PARSE_SETTINGS['MASTER_KEY'])
+os.environ["PARSE_API_ROOT"] = "https://cloud.yice.org.cn/zhulijun"
+
 app = Flask(__name__)
 
 @app.route("/",methods=['GET', 'POST'])

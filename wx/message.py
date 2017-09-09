@@ -2,7 +2,9 @@
 from wechatpy import parse_message
 from wechatpy.replies import TextReply
 from wechatpy.replies import TransferCustomerServiceReply
+from aiui import *
 from user import *
+from handler import *
 import sys
 
 reload(sys)
@@ -33,7 +35,14 @@ class WechatMessage(object):
         return handler()
     
     def handle_text(self):
-        return self.text_reply('收到你发来的消息了，内容是: %s' % self.message.content)
+        semantic_result = semantic(self.message.content, self.message.source)
+        try:
+            if(semantic_result['data']['service']=='scheduleX'):
+                reminder_handler(semantic_result,self.message.source)
+                return self.text_reply(semantic_result['data']['answer']['text'])
+        except Exception:
+            pass
+        return self.text_reply('你发来的消息: %s , 我暂时无法理解哦' % self.message.content)
 
     def handle_unknown(self):
         return self.text_reply(
@@ -72,5 +81,4 @@ class WechatMessage(object):
 
 def handle_message(msg):
     user_message = parse_message(msg)
-    print user_message
     return WechatMessage(user_message).handle()
