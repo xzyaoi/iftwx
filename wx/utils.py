@@ -1,8 +1,12 @@
 # Global Imports
-
+#coding: utf-8
 import os
 import ssl
 from wechat import client
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 # Parse Config
 from config import PARSE_SETTINGS
@@ -23,3 +27,68 @@ def put_follower_into_db():
             subscribe=True
         u = User.signup(each['openid'], "123456", wxOpenId=each['openid'], province=each['province'],subscribe_time=each['subscribe_time'],headimgurl=each['headimgurl'],isSubscribe=subscribe,city=each['city'],language=each['language'],remark=each['remark'],tags=each['tagid_list'],groupid=each['groupid'],sex=each['sex'],country=each['country'],nickName=each['nickname'])
     print 'Finished'
+
+def add_menu():
+    client.menu.create({
+    "button":[
+        {
+            "name":"我的",
+            "sub_button":[
+                {
+                    "type":"click",
+                    "name":"日程",
+                    "key":"ZLJ_CALENDAR"
+                },
+                {
+                    "type":"click",
+                    "name":"信息",
+                    "key":"ZLJ_MESSAGE"
+                },
+                {
+                    "type":"click",
+                    "name":"设置",
+                    "key":"ZLJ_SETTINGS"
+                }
+            ]
+        },
+        {
+            "name":"服务",
+            "sub_button":[
+                {
+                    "type":"miniprogram",
+                    "name":"ZTodo",
+                    "url":"https://cloud.yice.org.cn/dev/ztodo",
+                    "pagepath":"pages/task/index",
+                    "appid":"wxf26f47e8b08cf1a3"
+                },
+                {
+                    "type":"miniprogram",
+                    "name":"小圈活动",
+                    "url":"https://cloud.yice.org.cn/cms",
+                    "pagepath":"pages/Circle",
+                    "appid":"wx96e79f4686faf895"
+                }
+            ]
+        },
+        {
+            "name":"关于我们",
+            "sub_button":[
+                {
+                    "type":"view",
+                    "name":"介绍",
+                    "url":"http://www.soso.com/"
+                },
+                {
+                    "type":"view",
+                    "name":"合作伙伴",
+                    "url":"http://v.qq.com/"
+                },
+                {
+                    "type":"view",
+                    "name":"感谢",
+                    "url":"http://v.qq.com/"
+                }
+            ]
+        }
+    ]
+})
