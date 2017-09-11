@@ -50,7 +50,7 @@ class WechatMessage(object):
         return self.text_reply(
             '助 \n'
             '理 \n'
-            '君 \n'
+            '君'
         )
 
     def handle_unknown_event(self):
@@ -62,7 +62,7 @@ class WechatMessage(object):
         return self.text_reply(
             '助 \n'
             '理 \n'
-            '君 \n'
+            '君'
             % self.user.get_full_name()
         )
 
@@ -81,6 +81,7 @@ class WechatMessage(object):
         #TODO Do Different Operations
         return self.handle_text()
 
-def handle_message(msg):
-    user_message = parse_message(msg)
-    return WechatMessage(user_message).handle()
+def handle_template(appId,channelId,content,miniProgram=None,url=None):
+    # Query receiver openid
+    # Unpack Content
+    # Queue it 
