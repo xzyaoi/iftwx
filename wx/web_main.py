@@ -36,7 +36,6 @@ def send():
     appId = request.values.get('appid')
     channelId = request.values.get('channelid')
     content = request.values.get('content')
-    print content
     try:
         miniProgram = request.values.get('miniprogram')
     except Exception:

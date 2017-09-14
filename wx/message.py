@@ -8,7 +8,7 @@ from handler import *
 from model import App
 from model import Channel
 import sys
-
+import json
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -92,10 +92,7 @@ def handle_template(appId,channelId,content,miniProgram=None,url=None):
     # Get template id from appId
     push_app = App.Query.get(objectId=appId)
     templateId = push_app.templateId
-    print templateId
     channel = Channel.Query.get(objectId=channelId)
-    print channel.app
-    print channel.app.objectId
     if not channel.app.objectId==appId:
         return 'appid and channelId is not match'
     # Query receiver openid
