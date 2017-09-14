@@ -75,7 +75,7 @@ def gitlab_hook():
                         "value":commit['message']
                     }
                 }
-                content = json.dumps(info).encode('utf-8')
+                content = json.dumps(info,ensure_ascii=False,indent=2)
 
                 r=requests.post("http://wechat.zhitantech.com/send",{"appid":"9FDEfuTrGZ","channelid":"DTDcyyQP9t","content":content,"url":commit['url']})
     return ''
