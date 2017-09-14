@@ -73,6 +73,9 @@ def gitlab_hook():
                     },
                     "keyword4":{
                         "value":commit['message']
+                    },
+                    "remark":{
+                        "value":"请注意查看"
                     }
                 }
                 content = json.dumps(info,ensure_ascii=False,indent=2)
