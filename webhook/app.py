@@ -42,6 +42,7 @@ def mcircle_hook():
 @app.route('/gitlab', methods=['POST'])
 def gitlab_hook():
     if request.method == 'POST':
+        channelId = 'DTDcyyQP9t'
         print 'Got request:', request.data
         data = json.loads(request.data)
         if(data['event_name']=='repository_update'):
@@ -63,5 +64,5 @@ def gitlab_hook():
                     ref=ref,
                     message=commit['message'],
                     gitlab_url=commit['url'])
-                r = requests.get('https://pushbear.ftqq.com/sub?sendkey=804-6507b40121c173ce5caac52b4ed35436&text=代码有新的更新&desp='+message)
+                    r=requests.post("http://wechat.zhitantech.com/send",{"appid":"9FDEfuTrGZ","channelid":"DTDcyyQP9t","content":'{"first":{"value":"代码有新的提交"},"keyword1":{"value":"%s"},"keyword2":{"value":"%s"},"keyword3":{"value":"%s"},"keyword4":{"value":"%s"}, "remark":"请及时查看"}'% (data['user_name'],data['repository']['name'],ref=ref,commit['message']) })
     return ''
