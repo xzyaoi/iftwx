@@ -58,11 +58,12 @@ def gitlab_hook():
                 return ''
 
             for commit in commits:
-                message = u'{name}推送了新的代码到{repo}的{ref}分支 \n 点此链接进入:{gitlab_url} \n 改动信息:{message}'.format(
+                content = u'{"first":{"value":"代码有新的提交"},"keyword1":{"value":{name}},"keyword2":{"value":{repo}},"keyword3":{"value":ref},"keyword4":{"value":{message}}, "remark":{"value":"请及时查看"}}'.format(
                     name=data['user_name'],
                     repo=data['repository']['name'],
                     ref=ref,
                     message=commit['message'],
                     gitlab_url=commit['url'])
-                    r=requests.post("http://wechat.zhitantech.com/send",{"appid":"9FDEfuTrGZ","channelid":"DTDcyyQP9t","content":'{"first":{"value":"代码有新的提交"},"keyword1":{"value":"%s"},"keyword2":{"value":"%s"},"keyword3":{"value":"%s"},"keyword4":{"value":"%s"}, "remark":"请及时查看"}'% (data['user_name'],data['repository']['name'],ref=ref,commit['message']) })
+
+                r=requests.post("http://wechat.zhitantech.com/send",{"appid":"9FDEfuTrGZ","channelid":"DTDcyyQP9t","content":content,"url":commit['url']})
     return ''
