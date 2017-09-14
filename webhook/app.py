@@ -62,8 +62,7 @@ def gitlab_hook():
                     name=data['user_name'],
                     repo=data['repository']['name'],
                     ref=ref,
-                    message=commit['message'],
-                    gitlab_url=commit['url'])
+                    message=commit['message'])
 
                 r=requests.post("http://wechat.zhitantech.com/send",{"appid":"9FDEfuTrGZ","channelid":"DTDcyyQP9t","content":content,"url":commit['url']})
     return ''
