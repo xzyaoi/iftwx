@@ -44,7 +44,8 @@ class WechatMessage(object):
                     return self.text_reply(semantic_result['data']['answer']['text'])
                 else:
                     return self.text_reply('你发来的消息: %s , 我暂时无法理解哦' % self.message.content)
-        except Exception:
+        except Exception,e:
+            print repr(e)
             pass
         return self.text_reply('你发来的消息: %s , 我暂时无法理解哦' % self.message.content)
 

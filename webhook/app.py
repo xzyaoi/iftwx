@@ -35,9 +35,19 @@ def ztodo_hook():
     return ''
 # Smart Circle Webhook
 @app.route('/mc', methods=['POST'])
-
 def mcircle_hook():
     return ''
+
+# Coding Webhook
+@app.route('/coding/')
+def coding_hook():
+    return ''
+
+# Github Webhook
+@app.route('/github')
+def github_hook():
+    return ''
+
 # Gitlab Webhook
 @app.route('/gitlab', methods=['POST'])
 def gitlab_hook():
@@ -48,7 +58,6 @@ def gitlab_hook():
         if(data['event_name']=='repository_update'):
             # Repo Update Info
             return ''
-
         if(data['object_kind']=='push'):
         # gitlab hook data format https://docs.gitlab.com/ce/user/project/integrations/webhooks.html
             ref = data['ref'].split('/', 2)[-1]
@@ -79,6 +88,5 @@ def gitlab_hook():
                     }
                 }
                 content = json.dumps(info,ensure_ascii=False,indent=2)
-
                 r=requests.post("http://wechat.zhitantech.com/send",{"appid":"9FDEfuTrGZ","channelid":"DTDcyyQP9t","content":content,"url":commit['url']})
     return ''
