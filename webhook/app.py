@@ -72,16 +72,16 @@ def gitlab_hook():
                         "value":"代码有新的提交"
                     },
                     "keyword1":{
-                        "value":data['user_name']
+                        "value":data['user_name'] 
                     },
                     "keyword2":{
-                        "value":data['repository']['name']
+                        "value":data['repository']['name'] 
                     },
                     "keyword3":{
                         "value":ref
                     },
                     "keyword4":{
-                        "value":commit['message']
+                        "value":commit['message'] 
                     },
                     "remark":{
                         "value":"请注意查看"
