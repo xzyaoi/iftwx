@@ -87,6 +87,6 @@ def gitlab_hook():
                         "value":"请注意查看"
                     }
                 }
-                content = json.dumps(info,ensure_ascii=False,indent=2)
+                content = json.dumps(info)
                 r=requests.post("http://wechat.zhitantech.com/send",{"appid":"9FDEfuTrGZ","channelid":"DTDcyyQP9t","content":content,"url":commit['url']})
     return ''
