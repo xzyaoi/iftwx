@@ -28,6 +28,8 @@ def register():
         return ''
 
 @app.route('/',methods=['GET'])
+def basefunction():
+    return ''
 
 # ZTodo Webhook
 @app.route('/ztodo', methods=['POST'])
@@ -39,20 +41,25 @@ def mcircle_hook():
     return ''
 
 # Coding Webhook
-@app.route('/coding/')
-def coding_hook():
+@app.route('/coding/<string:channleId>',methods=['POST'])
+def coding_hook(channleId):
+    if request.method =='POST':
+        print 'Got request', request.data
+        data = json.loads(request.data)
+        event = request.headers['X-Coding-Event']
+        if event =='PUSH':
+            print 'push'
     return ''
 
 # Github Webhook
-@app.route('/github')
+@app.route('/github/<string:channleId>',methods=['POST'])
 def github_hook():
     return ''
 
 # Gitlab Webhook
-@app.route('/gitlab', methods=['POST'])
-def gitlab_hook():
+@app.route('/gitlab/<string:channleId>', methods=['POST'])
+def gitlab_hook(channleId):
     if request.method == 'POST':
-        channelId = 'DTDcyyQP9t'
         print 'Got request:', request.data
         data = json.loads(request.data)
         if(data['event_name']=='repository_update'):
