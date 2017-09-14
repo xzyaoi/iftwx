@@ -45,6 +45,7 @@ class WechatMessage(object):
                 else:
                     return self.text_reply('你发来的消息: %s , 我暂时无法理解哦' % self.message.content)
         except Exception,e:
+            traceback.print_exc()
             print repr(e)
             pass
         return self.text_reply('你发来的消息: %s , 我暂时无法理解哦' % self.message.content)
