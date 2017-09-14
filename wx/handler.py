@@ -3,15 +3,13 @@ from config import PARSE_SETTINGS
 from wechat import client
 from parse_rest.datatypes import Object
 from parse_rest.user import User
+from model import Reminder
 import sys
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 os.environ["PARSE_API_ROOT"] = "https://cloud.yice.org.cn/zhulijun"
-
-class Reminder(Object):
-    pass
 
 def reminder_handler(remind_obj,openid):
     try:

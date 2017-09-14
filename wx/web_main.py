@@ -6,7 +6,7 @@ from wechatpy.exceptions import InvalidSignatureException
 from config import WX_SETTINGS
 from config import PARSE_SETTINGS
 from message import handle_message
-from messafe import handle_template
+from message import handle_template
 import os
 
 register(PARSE_SETTINGS['APP_ID'], PARSE_SETTINGS['MASTER_KEY'])
@@ -36,8 +36,15 @@ def send():
     appId = request.values.get('appid')
     channelId = request.values.get('channelid')
     content = request.values.get('content')
-    miniProgram = request.values.get('miniprogram')
-    url = request.values.get('url')
+    print content
+    try:
+        miniProgram = request.values.get('miniprogram')
+    except Exception:
+        miniProgram = None
+    try:
+        url = request.values.get('url')
+    except Exception:
+        url = None
     return handle_template(appId, channelId, content, miniProgram,url)
 
 if __name__ == "__main__":

@@ -5,6 +5,8 @@ from wechatpy.replies import TransferCustomerServiceReply
 from aiui import *
 from user import *
 from handler import *
+from model import App
+from model import Channel
 import sys
 
 reload(sys)
@@ -76,12 +78,31 @@ class WechatMessage(object):
         self.message.content = getattr(self.message, 'recognition', '')
         if not self.message.content:
             return self.text_reply(
-                '识别识别，请重新发送'
+                '识别失败，请重新发送'
             )
-        #TODO Do Different Operations
         return self.handle_text()
 
+def handle_message(msg):
+    user_message = parse_message(msg)
+    return WechatMessage(user_message).handle()
+
+
 def handle_template(appId,channelId,content,miniProgram=None,url=None):
+    from queue import send_template_message
+    # Get template id from appId
+    push_app = App.Query.get(objectId=appId)
+    templateId = push_app.templateId
+    print templateId
+    channel = Channel.Query.get(objectId=channelId)
+    print channel.app
+    print channel.app.objectId
+    if not channel.app.objectId==appId:
+        return 'appid and channelId is not match'
     # Query receiver openid
+    receiver = channel.follower
+    for each in receiver:
+        result = send_template_message.delay(each,templateId,content,url,miniProgram)
+        print result
     # Unpack Content
-    # Queue it 
+    # Queue it
+    return 'success'
