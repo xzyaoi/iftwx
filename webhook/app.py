@@ -58,11 +58,24 @@ def gitlab_hook():
                 return ''
 
             for commit in commits:
-                content = u'{"first":{"value":"代码有新的提交"},"keyword1":{"value":{name}},"keyword2":{"value":{repo}},"keyword3":{"value":ref},"keyword4":{"value":{message}}, "remark":{"value":"请及时查看"}}'.format(
-                    name=data['user_name'],
-                    repo=data['repository']['name'],
-                    ref=ref,
-                    message=commit['message'])
+                info = {
+                    "first":{
+                        "value":"代码有新的提交"
+                    },
+                    "keyword1":{
+                        "value":data['user_name']
+                    },
+                    "keyword2":{
+                        "value":data['repository']['name']
+                    },
+                    "keyword3":{
+                        "value":ref
+                    },
+                    "keyword4":{
+                        "value":commit['message']
+                    }
+                }
+                content = json.dumps(info)
 
                 r=requests.post("http://wechat.zhitantech.com/send",{"appid":"9FDEfuTrGZ","channelid":"DTDcyyQP9t","content":content,"url":commit['url']})
     return ''
