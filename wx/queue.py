@@ -9,6 +9,6 @@ celery_app = Celery('zhulijun',broker='amqp://guest@localhost:5672//')
 
 @celery_app.task
 def send_template_message(openId,templateId,data,url=None,miniProgram=None):
-    data=json.dumps(data,ensure_ascii=False,indent=2)
+    data=json.loads(data)
     r=client.message.send_template(openId,templateId,data,url,miniProgram)
     return r
