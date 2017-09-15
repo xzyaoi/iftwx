@@ -23,8 +23,8 @@ def mcircle_hook():
     return ''
 
 # Coding Webhook
-@app.route('/coding/<string:channleId>',methods=['POST'])
-def coding_hook(channleId):
+@app.route('/coding/<string:channelId>',methods=['POST'])
+def coding_hook(channelId):
     if request.method =='POST':
         print ('Got request', request.data)
         data = json.loads(request.data)
@@ -34,13 +34,45 @@ def coding_hook(channleId):
     return ''
 
 # Github Webhook
-@app.route('/github/<string:channleId>',methods=['POST'])
-def github_hook():
+@app.route('/github/<string:channelId>',methods=['POST'])
+def github_hook(channelId):
+    if request.method == 'POST':
+        print ('Got request header', request.headers)
+        print ('Got request', request.data)
+        data = json.loads(request.data)
+        repo = data["repository"]["full_name"]
+        ref = data["ref"].split('/',2)[-1]
+        for commit in data['commits']:
+            msg = commit['message']
+            author = commit['committer']['name']
+            url = commit['url']
+            info = {
+                "first":{
+                    "value":"代码有新的提交"
+                },
+                "keyword1":{
+                    "value":author
+                },
+                "keyword2":{
+                    "value":repo
+                },
+                "keyword3":{
+                    "value":ref
+                },
+                "keyword4":{
+                    "value":msg
+                },
+                "remark":{
+                    "value":"请注意查看"
+                }
+            }
+            content = json.dumps(info,ensure_ascii=False,indent=2)
+            r=requests.post("http://wechat.zhitantech.com/send",{"appid":"9FDEfuTrGZ","channelid":channelId,"content":content,"url":commit['url']})
     return ''
 
 # Gitlab Webhook
-@app.route('/gitlab/<string:channleId>', methods=['POST'])
-def gitlab_hook(channleId):
+@app.route('/gitlab/<string:channelId>', methods=['POST'])
+def gitlab_hook(channelId):
     if request.method == 'POST':
         print ('Got request:', request.data)
         data = json.loads(request.data)
@@ -75,5 +107,5 @@ def gitlab_hook(channleId):
                     }
                 }
                 content = json.dumps(info,ensure_ascii=False,indent=2)
-                r=requests.post("http://wechat.zhitantech.com/send",{"appid":"9FDEfuTrGZ","channelid":"DTDcyyQP9t","content":content,"url":commit['url']})
+                r=requests.post("http://wechat.zhitantech.com/send",{"appid":"9FDEfuTrGZ","channelid":channelId,"content":content,"url":commit['url']})
     return ''
