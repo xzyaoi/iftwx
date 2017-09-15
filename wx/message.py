@@ -37,18 +37,22 @@ class WechatMessage(object):
         return handler()
     
     def handle_text(self):
-        semantic_result = semantic(self.message.content, self.message.source)
-        try:
-            if(semantic_result['data']['service']=='scheduleX'):
-                if reminder_handler(semantic_result,self.message.source):
-                    return self.text_reply(semantic_result['data']['answer']['text'])
-                else:
-                    return self.text_reply('你发来的消息: %s , 我暂时无法理解哦' % self.message.content)
-        except Exception,e:
-            traceback.print_exc()
-            print repr(e)
-            pass
-        return self.text_reply('你发来的消息: %s , 我暂时无法理解哦' % self.message.content)
+        if(self.message.content=="secret"):
+            userid = User.Query.get(wxOpenId=self.message.source).objectId
+            return self.text_reply('你的密钥是: %s' % userid)
+        else:
+            semantic_result = semantic(self.message.content, self.message.source)
+            try:
+                if(semantic_result['data']['service']=='scheduleX'):
+                    if reminder_handler(semantic_result,self.message.source):
+                        return self.text_reply(semantic_result['data']['answer']['text'])
+                    else:
+                        return self.text_reply('你发来的消息: %s , 我暂时无法理解哦' % self.message.content)
+            except Exception,e:
+                traceback.print_exc()
+                print repr(e)
+                pass
+            return self.text_reply('你发来的消息: %s , 我暂时无法理解哦' % self.message.content)
 
     def handle_unknown(self):
         return self.text_reply(
@@ -56,6 +60,20 @@ class WechatMessage(object):
             '理 \n'
             '君'
         )
+    
+    def handle_subscribe_scan_event(self):
+        from channel import add_follower
+        channelId = self.message.scene_id
+        openid = self.message.source
+        channel_name=add_follower(openid,channelId)
+        return self.text_reply('您已订阅%s频道' % channel_name)
+
+    def handle_scan_event(self):
+        from channel import add_follower
+        channelId = self.message.scene_id
+        openid = self.message.source
+        channel_name=add_follower(openid,channelId)
+        return self.text_reply('您已订阅%s频道' % channel_name)
 
     def handle_unknown_event(self):
         return self.handle_unknown()
