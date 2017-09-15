@@ -5,31 +5,13 @@ from flask import Flask
 from flask import request
 import json
 import requests
-import leancloud
-import sys
 import uuid
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
 
-@app.route('/register',methods=['POST'])
-def register():
-    if request.method == 'POST':
-        print request.data
-        user = leancloud.User()
-        user.set_username(request.form['username'])
-        user.set_password(request.form['password'])
-        user.set_email(request.form['email'])
-        user.set('sendkey',str(uuid.uuid4()))
-        user.set('sendfrom',request.form['sendfrom'])
-        user.sign_up()
-        print 'signed up'
-        return ''
-
 @app.route('/',methods=['GET'])
 def basefunction():
-    return ''
+    return 'Welcome'
 
 # ZTodo Webhook
 @app.route('/ztodo', methods=['POST'])
@@ -44,11 +26,11 @@ def mcircle_hook():
 @app.route('/coding/<string:channleId>',methods=['POST'])
 def coding_hook(channleId):
     if request.method =='POST':
-        print 'Got request', request.data
+        print ('Got request', request.data)
         data = json.loads(request.data)
         event = request.headers['X-Coding-Event']
         if event =='PUSH':
-            print 'push'
+            print ('push')
     return ''
 
 # Github Webhook
@@ -60,7 +42,7 @@ def github_hook():
 @app.route('/gitlab/<string:channleId>', methods=['POST'])
 def gitlab_hook(channleId):
     if request.method == 'POST':
-        print 'Got request:', request.data
+        print ('Got request:', request.data)
         data = json.loads(request.data)
         if(data['event_name']=='repository_update'):
             # Repo Update Info
@@ -68,11 +50,9 @@ def gitlab_hook(channleId):
         if(data['object_kind']=='push'):
         # gitlab hook data format https://docs.gitlab.com/ce/user/project/integrations/webhooks.html
             ref = data['ref'].split('/', 2)[-1]
-
             commits = data['commits']
             if commits and 'merge' in commits[-1]['message'].lower():
                 return ''
-
             for commit in commits:
                 info = {
                     "first":{
