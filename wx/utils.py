@@ -67,6 +67,11 @@ def add_menu():
                     "url":"https://cloud.yice.org.cn/cms",
                     "pagepath":"pages/Circle",
                     "appid":"wx96e79f4686faf895"
+                },
+                {
+                    "type":"view",
+                    "name":"每日要闻",
+                    "url":"https://cloud.yice.org.cn/dev/wxapp/#/show/4SHUdAE3Vx"
                 }
             ]
         },
