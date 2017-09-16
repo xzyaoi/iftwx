@@ -22,15 +22,5 @@ export default new Vuex.Store({
         user,
     },
     strict: debug,
-    plugins: debug ? [createLogger(), createPersist({
-        namespace: 'smartcircle-state-storage',
-        initialState: {},
-        // ONE_WEEK
-        expires: 7 * 24 * 60 * 60 * 1e3
-    })] : [createPersist({
-        namespace: 'smartcircle-state-storage',
-        initialState: {},
-        // ONE_WEEK
-        expires: 7 * 24 * 60 * 60 * 1e3
-    })],
+    plugins: debug ? [createLogger()] : [],
 });
