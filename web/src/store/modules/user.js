@@ -31,6 +31,10 @@ const actions = {
                     var app = new App()
                     app.set('objectId', '9FDEfuTrGZ')
                     var channel = new Channel()
+                    var user = new Parse.User()
+                    user.set('objectId', user_result[0].toJSON().objectId)
+                    channel.set('createdBy', user)
+                    channel.set('follower', [])
                     channel.set('name', channelName)
                     channel.set('app', app)
                     channel.save(null, {
