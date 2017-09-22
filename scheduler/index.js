@@ -3,11 +3,11 @@ var express = require('express');
 var kueUiExpress = require('kue-ui-express');
 
 var app = express();
-app.set('port', (process.env.PORT || 5000));
+app.set('port', 5000);
 
 kue.createQueue();
 
-kueUiExpress(app, '/kue', '/api');
+kueUiExpress(app, '/', '/api');
 
 // Mount kue JSON api
 app.use('/api', kue.app);
