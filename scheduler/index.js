@@ -7,7 +7,7 @@ app.set('port', 5000);
 
 kue.createQueue();
 
-kueUiExpress(app, '/', '/api');
+kueUIExpress(app, '/kue/', '/api/kue/');
 
 // Mount kue JSON api
 app.use('/api', kue.app);

@@ -1,6 +1,7 @@
 #coding: utf-8
 from wechatpy import parse_message
 from wechatpy.replies import TextReply
+from wechatpy.replies import ArticlesReply
 from wechatpy.replies import TransferCustomerServiceReply
 from aiui import *
 from user import *
@@ -27,6 +28,16 @@ class WechatMessage(object):
             content=reply_str[:800],  # WeChat can only accept 2048 bytes of char
             message=self.message,
         ).render()
+
+    def articles_reply(self):
+        reply = ArticlesReply(message=self.message)
+        reply.add_article({
+            'title': '欢迎关注助理君',
+            'description': '点击图片查看详情',
+            'image': 'https://i.loli.net/2017/09/24/59c723456c131.png',
+            'url': 'http://blog.askfermi.me/'
+        })
+        return reply.render()
 
     def handle(self):
         handler = getattr(self, 'handle_%s' % self.message.type.lower(), self.handle_unknown)
@@ -60,14 +71,12 @@ class WechatMessage(object):
             '理 \n'
             '君'
         )
-    
     def handle_subscribe_scan_event(self):
         from channel import add_follower
         channelId = self.message.scene_id
         openid = self.message.source
         channel_name=add_follower(openid,channelId)
         return self.text_reply('您已订阅%s频道' % channel_name)
-
     def handle_scan_event(self):
         from channel import add_follower
         channelId = self.message.scene_id
@@ -81,12 +90,7 @@ class WechatMessage(object):
     def handle_subscribe_event(self):
         # TODO: Update subscribe status
         addUser(self.message.source)
-        return self.text_reply(
-            '助 \n'
-            '理 \n'
-            '君'
-            % self.user.get_full_name()
-        )
+        return self.articles_reply()
 
     def handle_unsubscribe_event(self):
         #TODO: Update subscribe status
