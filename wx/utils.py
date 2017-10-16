@@ -72,9 +72,11 @@ def add_menu():
                     "appid":"wx96e79f4686faf895"
                 },
                 {
-                    "type":"view",
-                    "name":"每日要闻",
-                    "url":"https://cloud.yice.org.cn/dev/wxapp/#/show/4SHUdAE3Vx"
+                    "type":"miniprogram",
+                    "name":"新闻助手",
+                    "url":"https://cloud.yice.org.cn/dev/wxapp/#/show/4SHUdAE3Vx",
+                    "pagepath":"pages/timeline_tab/timeline",
+                    "appid":"wxa07ab1d2924a4874"
                 }
             ]
         },
