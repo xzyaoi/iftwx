@@ -61,7 +61,7 @@ def add_menu():
                     "type":"miniprogram",
                     "name":"ZTodo",
                     "url":"https://cloud.yice.org.cn/dev/ztodo",
-                    "pagepath":"pages/task/index",
+                    "pagepath":"pages/task",
                     "appid":"wxf26f47e8b08cf1a3"
                 },
                 {
@@ -86,7 +86,7 @@ def add_menu():
                 {
                     "type":"view",
                     "name":"介绍",
-                    "url":"http://www.soso.com/"
+                    "url":"https://blog.zhitantech.com/"
                 },
                 {
                     "type":"view",
