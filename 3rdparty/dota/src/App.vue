@@ -33,9 +33,7 @@
     <main>
       <v-content>
         <v-container fluid fill-height>
-          <v-layout justify-center align-center>
           <router-view></router-view>
-          </v-layout>
         </v-container>
       </v-content>
     </main>
@@ -71,7 +69,6 @@ body {
 
 main {
   text-align: center;
-  margin-top: 20px;
 }
 
 header {

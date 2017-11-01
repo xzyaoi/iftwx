@@ -1,12 +1,10 @@
 <template>
-<div>
-  <v-carousel>
-    <v-carousel-item v-for="(item,i) in pics" v-bind:src="item.src" :key="i"></v-carousel-item>
-  </v-carousel>
+<div class="login_container">
+      <img  class="center_img" src="http://www.esportsonly.com/assets/Uploads/Articles/dota2_logo_trans.png"></img>
       <v-btn color="primary" dark v-on:click="login()">
         </br>
         <i class="fa fa-steam" aria-hidden="true"></i>
-          通过STEAM账号登录
+          通过 STEAM 账号登录
       </v-btn>
 </div>
 </template>
@@ -18,7 +16,7 @@ export default {
   name: "app",
   data() {
     return {
-      pics: [{ src: "http://ac-cTnCn1vq.clouddn.com/782a7df26c49fd004ed2.png" }]
+
     };
   },
   methods: {
@@ -34,5 +32,12 @@ export default {
 </script>
 
 <style>
-
+.center_img {
+  margin-top:0px;
+  width:100%;
+  height:100%;
+}
+.login_container {
+  width:100%;
+}
 </style>
