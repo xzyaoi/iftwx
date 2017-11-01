@@ -12,12 +12,17 @@
 <script>
 import { steam_login_url } from "@/service/apis";
 import { axios } from "@/service";
+var SteamID = require('@/utils/steamid')
 export default {
   name: "app",
   data() {
     return {
 
     };
+  },
+  created(){
+    var sid = new SteamID(this.$route.query["openid.claimed_id"].slice(36));
+    console.log(sid.getSteam3RenderedID())
   },
   methods: {
     login() {
