@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/pages/Login'
-
+import Main from '@/pages/Main'
 Vue.use(Router)
 
 export default new Router({
@@ -14,6 +14,10 @@ export default new Router({
             path: '/verify',
             name: 'Verify',
             component: Login
+        }, {
+            path: '/main',
+            name: 'Main',
+            component: Main
         }
     ]
 })
