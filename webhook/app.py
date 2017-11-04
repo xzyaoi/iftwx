@@ -114,14 +114,14 @@ def gitlab_hook(channelId):
 @app.route('/travis/<string:channelId>', methods=['POST'])
 def travis_hook(channelId):
     if request.method == 'POST':
-        print ('Got request:', request.data)
-        data = json.loads(request.data)
+        print ('Got Request:', request.form['payload'])
+        data = json.loads(request.form['payload'])
         info = {
             "first":{
                 "value":data['author_name']+' 更新了构建状态'
             },
             "keyword1":{
-                "value":data['repository']['name'] 
+                "value":data['repository']['name']
             },
             "keyword2":{
                 "value":data['type']
