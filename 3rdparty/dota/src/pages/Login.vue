@@ -1,6 +1,6 @@
 <template>
 <div class="login_container">
-      <img  class="center_img" src="http://www.esportsonly.com/assets/Uploads/Articles/dota2_logo_trans.png"></img>
+      <img  class="center_img" src="https://i.loli.net/2017/11/01/59f9dfdf6167a.png"></img>
       <v-btn color="primary" dark v-on:click="login()">
         </br>
         <i class="fa fa-steam" aria-hidden="true"></i>
@@ -21,8 +21,19 @@ export default {
     };
   },
   created(){
-    var sid = new SteamID(this.$route.query["openid.claimed_id"].slice(36));
-    console.log(sid.getSteam3RenderedID())
+    try {
+      var sid = new SteamID(this.$route.query["openid.claimed_id"].slice(36));
+      if(sid){
+        var user = {
+            "steamid":sid.getSteam3RenderedID().split(":")[2].split("]")[0]
+        }
+        this.$store.dispatch('login',user)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+    
   },
   methods: {
     login() {
