@@ -77,6 +77,11 @@ def add_menu():
                     "url":"https://cloud.yice.org.cn/dev/wxapp/#/show/4SHUdAE3Vx",
                     "pagepath":"pages/timeline_tab/timeline",
                     "appid":"wxa07ab1d2924a4874"
+                },
+                {
+                    "type":"view",
+                    "name":"Dota助手",
+                    "url":"https://tenant.zhitantech.com/dev/dota/#/"
                 }
             ]
         },
