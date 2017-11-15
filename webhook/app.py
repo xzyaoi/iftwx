@@ -29,8 +29,34 @@ def coding_hook(channelId):
         print ('Got request', request.data)
         data = json.loads(request.data)
         event = request.headers['X-Coding-Event']
-        if event =='PUSH':
-            print ('push')
+        repo = data["repository"]["name"]
+        ref = data["ref"].split('/',2)[-1]
+        for commit in data['commits']:
+            msg = commit['short_message']
+            author = commit['committer']['name']
+            url = commit['web_url']
+            info = {
+                "first":{
+                    "value":"代码有新的提交"
+                },
+                "keyword1":{
+                    "value":author
+                },
+                "keyword2":{
+                    "value":repo
+                },
+                "keyword3":{
+                    "value":ref
+                },
+                "keyword4":{
+                    "value":msg
+                },
+                "remark":{
+                    "value":"请注意查看"
+                }
+            }
+            content = json.dumps(info,ensure_ascii=False,indent=2)
+            r=requests.post("http://wechat.zhitantech.com/send",{"appid":"9FDEfuTrGZ","channelid":channelId,"content":content,"url":commit['url']})
     return ''
 
 # Github Webhook
