@@ -56,7 +56,7 @@ def coding_hook(channelId):
                 }
             }
             content = json.dumps(info,ensure_ascii=False,indent=2)
-            r=requests.post("http://wechat.zhitantech.com/send",{"appid":"9FDEfuTrGZ","channelid":channelId,"content":content,"url":commit['url']})
+            r=requests.post("http://wechat.zhitantech.com/send",{"appid":"9FDEfuTrGZ","channelid":channelId,"content":content,"url":commit['web_url']})
     return ''
 
 # Github Webhook
