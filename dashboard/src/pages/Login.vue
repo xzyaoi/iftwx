@@ -16,7 +16,7 @@
             </v-flex>
           </v-card-text>
           <v-card-actions>
-            <v-btn flat>登录</v-btn>
+            <v-btn color="primary">登录</v-btn>
             <v-btn flat color="purple">微信登录</v-btn>
             <v-spacer></v-spacer>
             <v-btn icon @click.native="show = !show">
