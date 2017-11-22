@@ -9,16 +9,16 @@
  */
 
 interface WechatToken {
-  ZTODO_MINA_ID: string
-  ZTODO_MINA_SECRET: string
-  SERVICE_APP_ID:string
-  SERVICE_APP_SECRET:string
+  readonly ZTODO_MINA_ID: string
+  readonly ZTODO_MINA_SECRET: string
+  readonly SERVICE_APP_ID:string
+  readonly SERVICE_APP_SECRET:string
 }
 
 interface ParseToken {
-  REQUEST_URL:string
-  APP_ID: string
-  MASTER_KEY?:string
+  readonly REQUEST_URL:string
+  readonly APP_ID: string
+  readonly MASTER_KEY?:string
 }
 
 var wechatToken:WechatToken = {
@@ -34,6 +34,18 @@ var serviceParseToken:ParseToken = {
 }
 
 var ztodoParseToken:ParseToken = {
+  /**
+   * Please be noticed that for capability reasons,
+   * USE axios to get ZTodo related data if possible
+   * but the interface is exported only if you need to use.
+   * Before you use it, you need to re-initialize the parse instance.
+   */
   REQUEST_URL:'https://cloud.yice.org.cn/ztodo/',
   APP_ID:'ztodo-app-id'
+}
+
+export {
+  wechatToken,
+  serviceParseToken,
+  ztodoParseToken,
 }
