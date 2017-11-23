@@ -25,7 +25,7 @@
           </v-card-actions>
           <v-slide-y-transition>
             <v-card-text v-show="show">
-              在助理君微信公众号内回复: secret 即可获取你的私人密钥。请务必妥善保管。
+              在助理君微信公众号内回复: secret 即可获取你的私人密钥。<b>请务必妥善保管。</b>
             </v-card-text>
           </v-slide-y-transition>
         </v-card>
@@ -36,6 +36,7 @@
 
 <script lang="ts">
 import store from '../store'
+import router from '../router'
 export default {
   data: () => ({
     show: false,
@@ -43,7 +44,9 @@ export default {
   }),
   methods: {
     submit(secret:string) {
-      store.dispatch('logIn',secret)
+      store.dispatch('logIn',secret).then(function(res){
+        router.push('/app')
+      })
     }
   }
 }
