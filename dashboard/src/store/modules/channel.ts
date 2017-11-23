@@ -1,10 +1,12 @@
-import * as types from '../mutation-types.js'
-import router from '../../router'
+import * as types from '../mutation-types'
 import { Parse, axios } from '../../apis/index'
-import store from '../../store'
+import { ActionTree } from 'vuex'
 
 let Channel = Parse.Object.extend('Channel')
-let App = Parse.Object.extend('App')
+
+interface State {
+  current_channel: null 
+}
 
 const state = {
   current_channel: {},
@@ -13,8 +15,12 @@ const state = {
 
 const getters = {}
 
-const actions = {
-
+const actions: ActionTree<State, object> = {
+  getMyChannel({ commit }, secret) {
+    /**
+     * get all my channels
+     */
+  }
 }
 
 const mutations = {

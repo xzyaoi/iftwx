@@ -9,5 +9,6 @@ module.exports = {
             "SwitchCase": 1
         }],
         "no-unused-vars": 2,
-    }
+        "no-shadow": ["error", { "builtinGlobals": false, "hoist": "functions", "allow": [] }]
+    },
 }

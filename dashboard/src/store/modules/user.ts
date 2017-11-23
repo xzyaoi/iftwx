@@ -1,8 +1,6 @@
-import { Commit, ActionTree } from 'vuex'
-import * as types from '../mutation-types.js'
-import router from '../../router'
+import { ActionTree } from 'vuex'
+import * as types from '../mutation-types'
 import { Parse } from '../../apis/index'
-import store from '../../store'
 import { ParseUser }  from '../../models/user'
 
 export interface State {
@@ -17,11 +15,12 @@ const state: State = {
 const getters = {}
 
 const actions: ActionTree<State, object> = {
-  logIn({ commit: Commit }, secret) {
+  logIn({ commit }, secret) {
     let query = new Parse.Query(ParseUser)
     return query.get(secret, {
       success: function(result: ParseUser) {
         console.log(result)
+        commit(types.LOG_IN, result.toJSON())
       },
       error: function(err: any) {
         console.log(err)
@@ -31,7 +30,9 @@ const actions: ActionTree<State, object> = {
 }
 
 const mutations = {
-
+  [types.LOG_IN](_state: State, user: ParseUser) {
+    _state.current_user = user
+  }
 }
 export default {
   state,
