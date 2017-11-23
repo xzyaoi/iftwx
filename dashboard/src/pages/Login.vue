@@ -20,7 +20,7 @@
             <v-btn flat color="purple">微信登录</v-btn>
             <v-spacer></v-spacer>
             <v-btn icon @click.native="show = !show">
-              <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+              <v-icon>{{ show ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
             </v-btn>
           </v-card-actions>
           <v-slide-y-transition>
@@ -37,25 +37,9 @@
 <script lang="ts">
   export default {
     data: () => ({
-      model: {
-        username: 'admin',
-        password: '123456'
-      },
-      fields: {
-        username: {
-          label: 'Username'
-        },
-        password: {
-          label: 'Password',
-          type: 'password'
-        }
-      },
       show: false
     }),
     methods: {
-      onSuccess(data: any) {
-        console.log(data)
-      }
     }
   }
 </script>

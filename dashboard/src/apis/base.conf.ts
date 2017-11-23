@@ -15,6 +15,10 @@ interface WechatToken {
   readonly SERVICE_APP_SECRET:string
 }
 
+var obj = {
+  APP_ID:1234,
+}
+
 interface ParseToken {
   readonly REQUEST_URL:string
   readonly APP_ID: string
@@ -30,7 +34,7 @@ var wechatToken:WechatToken = {
 
 var serviceParseToken:ParseToken = {
   REQUEST_URL:'https://cloud.yice.org.cn/zhulijun/',
-  APP_ID:'zhulijun-app-id'
+  APP_ID:'zhulijun-app-id',
 }
 
 var ztodoParseToken:ParseToken = {
