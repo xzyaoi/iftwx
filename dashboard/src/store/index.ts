@@ -10,14 +10,14 @@ Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production';
 
 export default new Vuex.Store({
-    state: {
-        netStatus: '',
-        loadingFlag: false,
-    },
-    mutations: mutations.default,
-    modules: {
-        user,
-        channel,
-    },
-    strict: debug,
+  state: {
+    netStatus: '',
+    loadingFlag: false,
+  },
+  mutations: mutations.default,
+  modules: {
+    user,
+    channel,
+  },
+  strict: debug,
 });

@@ -19,14 +19,14 @@ export default new Router({
       component: Login
     },
     {
-      path:'/app',
-      name:'App',
-      component:Container,
-      children:[
+      path: '/app',
+      name: 'App',
+      component: Container,
+      children: [
         {
-          path:'message',
-          name:'Message',
-          component:MessageApp
+          path: 'message',
+          name: 'Message',
+          component: MessageApp
         }
       ]
     }
