@@ -12,11 +12,11 @@
           </v-card-title>
           <v-card-text>
             <v-flex>
-              <v-text-field name="secret" label="secret" id="secret"></v-text-field>
+              <v-text-field name="secret" label="Secret" id="secret" v-model="secret"></v-text-field>
             </v-flex>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary">登录</v-btn>
+            <v-btn color="primary" @click="submit(secret)">登录</v-btn>
             <v-btn flat color="purple">微信登录</v-btn>
             <v-spacer></v-spacer>
             <v-btn icon @click.native="show = !show">
@@ -35,13 +35,18 @@
 </template>
 
 <script lang="ts">
-  export default {
-    data: () => ({
-      show: false
-    }),
-    methods: {
+import store from '../store'
+export default {
+  data: () => ({
+    show: false,
+    secret:'',
+  }),
+  methods: {
+    submit(secret:string) {
+      store.dispatch('logIn',secret)
     }
   }
+}
 </script>
 
 <style scopedSlots>

@@ -5,10 +5,9 @@ import { serviceParseToken, ztodoParseToken } from './base.conf'
 Parse.initialize(serviceParseToken.APP_ID)
 Parse.serverURL = serviceParseToken.REQUEST_URL
 
-function abc(d:string){
-    console.log(d)
-}
+import {Object as POJ} from "parse";
 
 export {
-    Parse
+    Parse,
+    POJ
 }
