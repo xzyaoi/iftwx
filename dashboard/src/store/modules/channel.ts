@@ -2,10 +2,9 @@ import * as types from '../mutation-types'
 import { Parse, axios } from '../../apis/index'
 import { ActionTree } from 'vuex'
 
-let Channel = Parse.Object.extend('Channel')
 
 interface State {
-  current_channel: null 
+  current_channel: 
 }
 
 const state = {
