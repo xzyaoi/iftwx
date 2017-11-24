@@ -4,7 +4,7 @@
       选择一个应用
     </v-stepper-step>
     <v-stepper-content step="1">
-      <v-card height="200px" flat>
+      <v-card flat>
         <v-btn
           :color="selected_app==='github'?'primary':'blue-grey'"
           class="white--text"
