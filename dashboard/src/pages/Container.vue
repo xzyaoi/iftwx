@@ -96,7 +96,7 @@
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
-        <v-layout justify-center>
+        <v-layout>
           <router-view></router-view>
         </v-layout>
       </v-container>
@@ -151,6 +151,8 @@ export default Vue.extend({
         location.href="https://discord.gg/6BpzrDG"
       } else if (contentText === "我的频道") {
         router.push('/app/channel')
+      } else if (contentText === "我的频道") {
+        router.push('/app/channel/create')
       }
     }
   }

@@ -4,6 +4,7 @@ import Login from '@/pages/Login.vue'
 import Container from '@/pages/Container.vue'
 import MessageApp from '@/pages/MessageApp.vue'
 import MyChannelPage from '@/pages/Channels/MyChannel.vue'
+import CreateChannel from '@/pages/Channels/CreateChannel.vue'
 
 Vue.use(Router)
 
@@ -33,6 +34,11 @@ export default new Router({
           path: 'channel',
           name: 'Channel',
           component: MyChannelPage
+        },
+        {
+          path: 'channel/create',
+          name: 'CreateChannel',
+          component: CreateChannel
         }
       ]
     }
