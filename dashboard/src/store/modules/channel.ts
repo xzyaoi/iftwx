@@ -1,14 +1,16 @@
 import user from './user';
 import * as types from '../mutation-types';
-import { Parse, axios } from '../../apis/index'
+import { Parse, Axios } from '../../apis/index'
+import { acquire_qrcode_url } from '../../apis/endpoints'
 import { ActionTree } from 'vuex'
-import { Channel } from '../../models/channel'
+import { Channel, CreateChannelPayload } from '../../models/channel'
 import { ParseUser } from '../../models/user';
-import store from '../index'
+import { App } from '../../models/app'
+
 
 interface State {
-  current_channel: Channel,
-  my_channels: Array<Channel>
+  current_channel: Channel;
+  my_channels: Array<Channel>;
 }
 
 const state: State = {
@@ -17,30 +19,74 @@ const state: State = {
 }
 
 const getters = {
-  getChannels(state: State): Array<Channel> {
-    return state.my_channels
-  }
+
 }
 
-
 const actions: ActionTree<State, object> = {
-  getChannels({ commit }, secret=user.state.current_user.id) {
+  getChannels({ commit }, secret = user.state.current_user.id) {
     return new Promise((resolve, reject) => {
       let query = new Parse.Query(Channel)
       let user_query = new Parse.Query(ParseUser)
       user_query.get(secret, {
-        success: function(res:ParseUser){
+        success: function(res: ParseUser) {
           query.equalTo('createdBy', res)
           query.find({
             success: function(results: Array<Channel>) {
               resolve(results)
               commit(types.CHANNELS, results)
+            },
+            error: function(err: Error) {
+              console.log(err)
+              reject(err)
             }
           })
         },
-        error: function(err:any){
-          reject("user not found")
+        error: function(err: Error) {
+          reject(err)
         }
+      })
+    })
+  },
+  createChannel({ commit }, payload: CreateChannelPayload) {
+    return new Promise((resolve, reject) => {
+      let user_query = new Parse.Query(ParseUser)
+      user_query.get(user.state.current_user.id, {
+        success: function(res: ParseUser) {
+          let app_query = new Parse.Query(App)
+          app_query.get(payload.app_id, {
+            success: function(app: App) {
+              let channel = new Channel()
+              channel.set('app', app)
+              channel.set('name', payload.channel_name)
+              channel.set('createdBy', res)
+              channel.set('follower', [])
+              channel.save(null, {
+                success: function(_channel: Channel) {
+                  resolve(_channel)
+                },
+                error: function(err: Error) {
+                  console.log(err)
+                  reject(err)
+                }
+              })
+            }
+          })
+        },
+        error: function(err: Error) {
+          console.log(err)
+          reject(err)
+        }
+      })
+    })
+  },
+  acquireChannelQRCode({ commit }, channelId: string) {
+    return new Promise((resolve, reject) => {
+      Axios.post(acquire_qrcode_url, {
+        channelId: channelId
+      }).then(function(result) {
+        resolve(result)
+      }).then(function(err) {
+        reject(err)
       })
     })
   }

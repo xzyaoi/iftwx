@@ -1,7 +1,7 @@
 import { Parse } from './parse'
-import { axios } from './axios'
+import { Axios } from './axios'
 
 export {
   Parse,
-  axios
+  Axios
 }

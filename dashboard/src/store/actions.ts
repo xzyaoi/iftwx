@@ -1,5 +1,4 @@
-import { Commit, Action, ActionTree } from 'vuex'
-import * as types from './mutation-types'
+import { ActionTree } from 'vuex'
 
 
 const actions: ActionTree<any, any> = {

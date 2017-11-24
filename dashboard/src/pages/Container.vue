@@ -146,12 +146,11 @@ export default Vue.extend({
   },
   methods:{
     triggerChangePath(contentText:string) {
-      console.log(this.current_user)
       if(contentText === "反馈意见") {
         location.href="https://discord.gg/6BpzrDG"
       } else if (contentText === "我的频道") {
         router.push('/app/channel')
-      } else if (contentText === "我的频道") {
+      } else if (contentText === "创建频道") {
         router.push('/app/channel/create')
       }
     }

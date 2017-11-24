@@ -33,19 +33,19 @@ let serviceParseToken: ParseToken = {
   APP_ID: 'zhulijun-app-id',
 }
 
-let ztodoParseToken: ParseToken = {
-  /**
+/**
    * Please be noticed that for capability reasons,
    * USE axios to get ZTodo related data if possible
    * but the interface is exported only if you need to use.
    * Before you use it, you need to re-initialize the parse instance.
-   */
+let ztodoParseToken: ParseToken = {
+
   REQUEST_URL: 'https://cloud.yice.org.cn/ztodo/',
   APP_ID: 'ztodo-app-id'
 }
-
+*/
 export {
   wechatToken,
   serviceParseToken,
-  ztodoParseToken,
+  //ztodoParseToken,
 }

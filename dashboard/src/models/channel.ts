@@ -1,5 +1,4 @@
 import { POJ } from '../apis/parse'
-import { ParseUser } from './user'
 
 class Channel extends POJ {
   readonly className: string
@@ -9,6 +8,12 @@ class Channel extends POJ {
   }
 }
 
+interface CreateChannelPayload {
+  channel_name: string;
+  app_id: string;
+}
+
 export {
-  Channel
+  Channel,
+  CreateChannelPayload,
 }

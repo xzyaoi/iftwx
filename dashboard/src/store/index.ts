@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Vuex, { Commit, Dispatch, GetterTree } from 'vuex'
+import Vuex from 'vuex'
 import * as mutations from './mutations'
 
 import user from './modules/user'

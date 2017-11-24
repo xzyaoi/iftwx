@@ -13,9 +13,7 @@ const state: State = {
 }
 
 const getters = {
-  current_user(state: State): ParseUser {
-    return state.current_user
-  }
+
 }
 
 const actions: ActionTree<State, object> = {

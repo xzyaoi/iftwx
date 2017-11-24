@@ -6,36 +6,41 @@
     <v-stepper-content step="1">
       <v-card height="200px" flat>
         <v-btn
-          color="blue-grey"
+          :color="selected_app==='github'?'primary':'blue-grey'"
           class="white--text"
+          @click="chooseApp('github')"
         >
         Github
         <v-icon right dark>fa-github</v-icon>
         </v-btn>
         <v-btn
-          color="blue-grey"
+          :color="selected_app==='gitlab'?'primary':'blue-grey'"
           class="white--text"
+          @click="chooseApp('gitlab')"
         >
         Gitlab
         <v-icon right dark>fa-gitlab</v-icon>
         </v-btn>
         <v-btn
-          color="blue-grey"
+          :color="selected_app==='travis'?'primary':'blue-grey'"
           class="white--text"
+          @click="chooseApp('travis')"
         >
         Travis
         <v-icon right dark>fa-code</v-icon>
         </v-btn>
         <v-btn
-          color="blue-grey"
+          :color="selected_app==='coding'?'primary':'blue-grey'"
           class="white--text"
+          @click="chooseApp('coding')"
         >
         Coding
         <v-icon right dark>fa-code</v-icon>
         </v-btn>
         <v-btn
-          color="blue-grey"
+          :color="selected_app==='sdk'?'primary':'blue-grey'"
           class="white--text"
+          @click="chooseApp('sdk')"
         >
         SDK
         <v-icon right dark>fa-code</v-icon>
@@ -43,23 +48,30 @@
         <v-text-field
           name="channelName"
           label="频道名称"
+          v-model="channel_name"
           id="ChannelName"
         ></v-text-field>
       </v-card>
-      <v-btn color="primary" @click.native="create_step = 2">继续</v-btn>
+      <v-btn color="primary" @click="next(2)">继续</v-btn>
     </v-stepper-content>
     <v-stepper-step step="2" v-bind:complete="create_step > 2">设置Webhook<small>或使用<a href="/sdk">SDK</a></small></v-stepper-step>
-
     <v-stepper-content step="2">
-      <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
-      <v-btn color="primary" @click.native="create_step = 3">继续</v-btn>
-      <v-btn flat @click.native="create_step = 1">取消</v-btn>
+      <v-card flat>
+        您的Webhook地址: {{channel_hook}}</br>
+        具体使用方法请参照 <a href="https://blog.zhitantech.com/zhulijun-get-notifications/">使用帮助</a>
+      </v-card>
+      <v-btn color="primary" @click.native="next(3)">继续</v-btn>
+      <v-btn flat @click.native="previous(1)">上一步</v-btn>
     </v-stepper-content>
     <v-stepper-step step="3" v-bind:complete="create_step > 3">获取二维码</v-stepper-step>
     <v-stepper-content step="3">
-      <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
-      <v-btn color="primary" @click.native="create_step = 4">继续</v-btn>
-      <v-btn flat @click.native="create_step = 2">取消</v-btn>
+      <v-card flat>
+        扫描如下二维码即可关注 {{channel_name}} </br>
+        <img :src="channel_qrcode_url" alt="助理君.png" title="助理君.png"></img>
+        </br>
+        并可分享给朋友
+      </v-card>
+      <v-btn flat @click.native="previous(2)">上一步</v-btn>
     </v-stepper-content>
   </v-stepper>
 </template>
@@ -67,10 +79,65 @@
 <script lang="ts">
 import { Parse } from '../../apis/parse'
 import Vue from 'vue'
+import { Channel } from '../../models/channel'
 export default Vue.extend({
   data: ()=>({
-    create_step:1
-  })
+    create_step:1,
+    selected_app:'',
+    channel_name:'',
+    channel_id:'',
+    channel_hook:'',
+    channel_qrcode_url:''
+  }),
+  methods:{
+    chooseApp(appName: string) {
+      if(appName === this.selected_app){
+        this.selected_app = ''
+      } else {
+        this.selected_app = appName
+      }
+    },
+    next(step: number) {
+      if(step === 2){
+        this.createChannel()
+      } else if (step === 3){
+        this.getQRCode()
+      }
+      this.create_step = step
+    },
+    previous(step: number) {
+      this.create_step = step
+    },
+    createChannel() {
+      let app_id = ''
+      let self = this
+      if( this.selected_app === 'github' || this.selected_app === 'gitlab'){
+        app_id = '9FDEfuTrGZ'
+      } else if (this.selected_app === 'travis') {
+        app_id = 'MZieRFdSbL'
+      } else {
+        app_id = 'CdT0tHYNTD'
+      }
+      let channel_payload = {
+        channel_name: this.channel_name,
+        app_id: app_id
+      }
+      this.$store.dispatch('createChannel', channel_payload).then(function(res: Channel){
+        self.channel_id = res.id
+        self.channel_hook = 'https://zt-webhook.herokuapp.com/'+ self.selected_app+'/'+ self.channel_id
+      })
+    },
+    getQRCode(){
+      let self = this
+      if(this.channel_id!='') {
+        this.$store.dispatch('acquireChannelQRCode',this.channel_id).then(function(res: any){
+          self.channel_qrcode_url = res.data.result
+        })
+      } else {
+        console.error('[error]: Channel ID Not Provided')
+      }
+    }
+  }
 })
 </script>
 
