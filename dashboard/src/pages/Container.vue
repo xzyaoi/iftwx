@@ -88,8 +88,8 @@
       <v-btn icon large>
         <v-avatar size="32px" tile>
           <img
-            src="https://vuetifyjs.com/static/doc-images/logo.svg"
-            alt="Vuetify"
+            :src="current_user.headimgurl"
+            :alt="current_user.nickName"
           >
         </v-avatar>
       </v-btn>
@@ -106,9 +106,12 @@
 
 <script lang="ts">
 import router from '../router'
-export default {
+import user from '../store/modules/user'
+import Vue from 'vue'
+export default Vue.extend({
   name: 'app',
   data:()=>({
+    current_user: user.state.current_user.toJSON(),
     dialog: false,
     drawer: true,
       items: [
@@ -143,6 +146,7 @@ export default {
   },
   methods:{
     triggerChangePath(contentText:string) {
+      console.log(this.current_user)
       if(contentText === "反馈意见") {
         location.href="https://discord.gg/6BpzrDG"
       } else if (contentText === "我的频道") {
@@ -150,7 +154,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style>
