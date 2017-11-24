@@ -17,10 +17,10 @@
         v-bind:search="search"
       >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-right">{{ props.item.objectId }}</td>
-        <td class="text-xs-right">{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.createdAt }}</td>
-        <td class="text-xs-right">{{ props.item.follower.length }}</td>
+        <td class="text-xs-left">{{ props.item.objectId }}</td>
+        <td class="text-xs-left">{{ props.item.name }}</td>
+        <td class="text-xs-left">{{ props.item.createdAt }}</td>
+        <td class="text-xs-left">{{ props.item.follower.length }}</td>
       </template>
       <template slot="pageText" slot-scope="{ pageStart, pageStop }">
         From {{ pageStart }} to {{ pageStop }}
@@ -44,13 +44,13 @@ export default Vue.extend({
     headers: [
           {
             text: '频道ID',
-            align: 'right',
+            align: 'left',
             sortable: false,
             value: 'objectId'
           },
-          { text: '频道名', value: 'name' },
-          { text: '创建时间', value: 'createdAt' },
-          { text: '关注人数', value: 'follower' }
+          { text: '频道名', value: 'name', align:'left' },
+          { text: '创建时间', value: 'createdAt', align:'left' },
+          { text: '关注人数', value: 'follower', align:'left' }
         ],
 
   }),
