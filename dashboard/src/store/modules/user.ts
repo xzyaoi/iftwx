@@ -12,7 +12,11 @@ const state: State = {
   current_user: new ParseUser()
 }
 
-const getters = {}
+const getters = {
+  current_user(state: State): ParseUser {
+    return state.current_user
+  }
+}
 
 const actions: ActionTree<State, object> = {
   logIn({ commit }, secret) {
@@ -20,7 +24,7 @@ const actions: ActionTree<State, object> = {
     return query.get(secret, {
       success: function(result: ParseUser) {
         console.log(result)
-        commit(types.LOG_IN, result.toJSON())
+        commit(types.LOG_IN, result)
       },
       error: function(err: any) {
         console.log(err)

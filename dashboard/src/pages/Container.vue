@@ -96,7 +96,7 @@
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
-        <v-layout justify-center align-center>
+        <v-layout justify-center>
           <router-view></router-view>
         </v-layout>
       </v-container>
@@ -105,6 +105,7 @@
 </template>
 
 <script lang="ts">
+import router from '../router'
 export default {
   name: 'app',
   data:()=>({
@@ -144,6 +145,8 @@ export default {
     triggerChangePath(contentText:string) {
       if(contentText === "反馈意见") {
         location.href="https://discord.gg/6BpzrDG"
+      } else if (contentText === "我的频道") {
+        router.push('/app/channel')
       }
     }
   }
