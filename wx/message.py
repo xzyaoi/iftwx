@@ -127,3 +127,12 @@ def handle_template(appId,channelId,content,miniProgram=None,url=None):
     # Unpack Content
     # Queue it
     return 'success'
+
+def handle_plain_msg(appId,channelId,content):
+    from queue import send_plain_message
+    channel = Channel.Query.get(objectId = channelId)
+    receiver = channel.follower
+    for each in receiver:
+        result = send_plain_message.delay(each, channelId, content)
+        print result
+    return 'success'

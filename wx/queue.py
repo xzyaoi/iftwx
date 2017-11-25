@@ -1,5 +1,6 @@
 from celery import Celery
 from wechat import client
+from wechatpy.replies import TextReply
 import json
 import sys
 reload(sys)
@@ -25,4 +26,8 @@ def send_template_message(openId,templateId,data,url=None,miniProgram=None):
 
 @celery_app.task
 def send_activity_notice(mobile,activityTitle):
+    pass
+
+@celery_app.task 
+def send_plain_message(openId, channelId, content):
     

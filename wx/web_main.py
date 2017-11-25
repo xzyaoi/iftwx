@@ -46,5 +46,12 @@ def send():
         url = None
     return handle_template(appId, channelId, content, miniProgram,url)
 
+@app.route("/psend",methods=['POST'])
+def plain_send():
+    appId = ''
+    channelId = request.values.get('channelid')
+    content = request.values.get('content')
+    
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5001)
