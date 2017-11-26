@@ -29,5 +29,8 @@ def send_activity_notice(mobile,activityTitle):
     pass
 
 @celery_app.task 
-def send_plain_message(openId, channelId, content):
-    
+def send_plain_message(openId, content):
+    return TextReply(
+        content=content[:800],  # WeChat can only accept 2048 bytes of char
+        message=self.message,
+    ).render()

@@ -133,6 +133,6 @@ def handle_plain_msg(appId,channelId,content):
     channel = Channel.Query.get(objectId = channelId)
     receiver = channel.follower
     for each in receiver:
-        result = send_plain_message.delay(each, channelId, content)
+        result = send_plain_message.delay(each, content)
         print result
     return 'success'
