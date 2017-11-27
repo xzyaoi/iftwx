@@ -62,7 +62,7 @@
       </v-card>
       <v-card flat v-if="selected_app === 'sdk'">
         您的频道ID为: {{channel_id}}</br>
-        具体使用方法请参照 <a href="https://blog.zhitantech.com/zhulijun-get-notifications/">使用帮助</a></br>
+        具体使用方法请参照 <a href="https://github.com/zhitantech/wxpush-sdk-py/">使用帮助</a></br>
         请遵照相关法律法规进行消息推送。
       </v-card>
       <v-btn color="primary" @click.native="next(3)">继续</v-btn>
