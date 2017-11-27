@@ -56,11 +56,11 @@
     </v-stepper-content>
     <v-stepper-step step="2" v-bind:complete="create_step > 2">设置Webhook<small>或使用<a href="/sdk">SDK</a></small></v-stepper-step>
     <v-stepper-content step="2">
-      <v-card flat v-if="selected_app !== sdk">
+      <v-card flat v-if="selected_app !== 'sdk'">
         您的Webhook地址: {{channel_hook}}</br>
         具体使用方法请参照 <a href="https://blog.zhitantech.com/zhulijun-get-notifications/">使用帮助</a>
       </v-card>
-      <v-card flat v-if="selected_app === sdk">
+      <v-card flat v-if="selected_app === 'sdk'">
         您的频道ID为: {{channel_id}}</br>
         具体使用方法请参照 <a href="https://blog.zhitantech.com/zhulijun-get-notifications/">使用帮助</a></br>
         请遵照相关法律法规进行消息推送。
@@ -128,6 +128,7 @@ export default Vue.extend({
         app_id: app_id
       }
       this.$store.dispatch('createChannel', channel_payload).then(function(res: Channel){
+        console.log(res)
         self.channel_id = res.id
         self.channel_hook = 'https://zt-webhook.herokuapp.com/'+ self.selected_app+'/'+ self.channel_id
       })
