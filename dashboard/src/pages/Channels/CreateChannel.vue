@@ -56,9 +56,14 @@
     </v-stepper-content>
     <v-stepper-step step="2" v-bind:complete="create_step > 2">设置Webhook<small>或使用<a href="/sdk">SDK</a></small></v-stepper-step>
     <v-stepper-content step="2">
-      <v-card flat>
+      <v-card flat v-if="selected_app !== sdk">
         您的Webhook地址: {{channel_hook}}</br>
         具体使用方法请参照 <a href="https://blog.zhitantech.com/zhulijun-get-notifications/">使用帮助</a>
+      </v-card>
+      <v-card flat v-if="selected_app === sdk">
+        您的频道ID为: {{channel_id}}</br>
+        具体使用方法请参照 <a href="https://blog.zhitantech.com/zhulijun-get-notifications/">使用帮助</a></br>
+        请遵照相关法律法规进行消息推送。
       </v-card>
       <v-btn color="primary" @click.native="next(3)">继续</v-btn>
       <v-btn flat @click.native="previous(1)">上一步</v-btn>
