@@ -21,7 +21,6 @@ const actions: ActionTree<State, object> = {
     let query = new Parse.Query(ParseUser)
     return query.get(secret, {
       success: function(result: ParseUser) {
-        console.log(result)
         commit(types.LOG_IN, result)
       },
       error: function(err: any) {

@@ -120,8 +120,10 @@ export default Vue.extend({
         app_id = '9FDEfuTrGZ'
       } else if (this.selected_app === 'travis') {
         app_id = 'MZieRFdSbL'
-      } else {
+      } else if (this.selected_app === 'ztodo') {
         app_id = 'CdT0tHYNTD'
+      } else {
+        app_id = 'dLy5IeZT9H'
       }
       let channel_payload = {
         channel_name: this.channel_name,
