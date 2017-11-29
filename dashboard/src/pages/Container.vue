@@ -43,9 +43,15 @@
                 <v-icon>{{ child.icon }}</v-icon>
               </v-list-tile-action>
               <v-list-tile-content>
-                <v-list-tile-title>
+                <v-list-tile-title v-if="!child.isTesting">
                   {{ child.text }}
                 </v-list-tile-title>
+                <v-badge color="green"  v-if="child.isTesting" class="testBadge">
+                  <span slot="badge" style="font-size:10px">Beta</span>
+                  <v-list-tile-title>
+                  {{ child.text }}
+                </v-list-tile-title>
+                </v-badge>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
@@ -105,66 +111,68 @@
 </template>
 
 <script lang="ts">
-import router from '../router'
-import user from '../store/modules/user'
-import Vue from 'vue'
+import router from "../router";
+import user from "../store/modules/user";
+import Vue from "vue";
 export default Vue.extend({
-  name: 'app',
-  data:()=>({
+  name: "app",
+  data: () => ({
     current_user: user.state.current_user.toJSON(),
     dialog: false,
     drawer: true,
-      items: [
-        { icon: 'contacts', text: '总览' },
-        { icon: 'history', text: '最常使用' },
-        {
-          icon: 'keyboard_arrow_up',
-          'icon-alt': 'keyboard_arrow_down',
-          text: '频道',
-          model: true,
-          children: [
-            { icon: 'add', text: '创建频道' },
-            { icon: 'history', text: '我的频道' },
-          ]
-        },
-        {
-          icon: 'keyboard_arrow_up',
-          'icon-alt': 'keyboard_arrow_down',
-          text: '更多',
-          model: false,
-          children: [
-            { text: '导出' },
-          ]
-        },
-        { icon: 'settings', text: '设置' },
-        { icon: 'chat_bubble', text: '反馈意见' },
-        { icon: 'help', text: '帮助' },
-        { icon: 'phonelink', text: '关注' }]
+    items: [
+      { icon: "contacts", text: "总览" },
+      { icon: "history", text: "最常使用" },
+      {
+        icon: "keyboard_arrow_up",
+        "icon-alt": "keyboard_arrow_down",
+        text: "频道",
+        model: true,
+        children: [
+          { icon: "add", text: "创建频道" },
+          { icon: "history", text: "我的频道" }
+        ]
+      },
+      {
+        icon: "keyboard_arrow_up",
+        "icon-alt": "keyboard_arrow_down",
+        text: "插件",
+        model: false,
+        children: [{ text: "Team Vault", isTesting: true }]
+      },
+      { icon: "settings", text: "设置" },
+      { icon: "chat_bubble", text: "反馈意见" },
+      { icon: "help", text: "帮助" },
+      { icon: "phonelink", text: "关注" }
+    ]
   }),
   props: {
     source: String
   },
-  methods:{
-    triggerChangePath(contentText:string) {
-      if(contentText === "反馈意见") {
-        location.href="https://discord.gg/6BpzrDG"
+  methods: {
+    triggerChangePath(contentText: string) {
+      if (contentText === "反馈意见") {
+        location.href = "https://discord.gg/6BpzrDG";
       } else if (contentText === "我的频道") {
-        router.push('/app/channel')
+        router.push("/app/channel");
       } else if (contentText === "创建频道") {
-        router.push('/app/channel/create')
+        router.push("/app/channel/create");
       }
     }
   }
-})
+});
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.testBadge {
+
 }
 </style>
