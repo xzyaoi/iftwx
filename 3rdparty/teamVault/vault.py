@@ -1,6 +1,7 @@
 #coding:utf-8
-from config import VAULT_URL,ROOT_TOKEN
+from config import VAULT_URL,ROOT_TOKEN, UNSEAL_KEY
 import hvac
+from templite import Templite
 
 class Singleton(type):
     _instances = {}
@@ -17,7 +18,7 @@ class Vault(metaclass=Singleton):
     def listPolicies(self):
         return self.client.list_policies()
     def isAuthenticated(self):
-        return self.client.isAuthenticated()
+        return self.client.is_authenticated()
     def writeSecret(self, name, secret):
         self.client.write(name,value=secret)
     def deleteSecret(self, name):
@@ -25,22 +26,36 @@ class Vault(metaclass=Singleton):
     def readSecret(self,name):
         return self.client.read(name)
     def createPolicy(self, policyName, channelId, appName):
-        policy = """
+        template = Templite("""
             path "sys" {
-            policy = "deny"
+                policy = "deny"
             }
 
-            path "" {
-            policy = "write"
+            path "{{channelId}}/{{appName}}" {
+                policy = "write"
             }
 
-            path "secret/foo" {
-            policy = "read"
+            path "{{channelId}}/{{appName}}" {
+                policy = "read"
             }
-        """
+        """)
+        t = template.render({"channelId":channelId, "appName":appName})
+        print(t)
+        self.client.set_policy(policyName, t)
+    def deletePolicy(self,policyName):
+        self.client.delete_policy(policyName)
+    def getPolicy(self, policyName, needParse):
+        return self.client.get_policy(policyName, parse=needParse)
+    def isSealed(self):
+        return self.client.is_sealed()
+    def seal(self):
+        self.client.seal()
+    def unseal(self, token):
+        self.client.unseal(token)
+    def generateToken(self,policyName,lease="1h"):
+        return self.client.create_token(policies=[policyName], lease=lease)
+    def revokeToken(token):
+        self.client.revoke_token(token)
+
 v = Vault()
-
-print (v.listPolicies())
-v.writeSecret('secret/password','starlabs')
-print (v.readSecret('secret/password'))
-v.deleteSecret('secret/password')
+print(v.isAuthenticated())
