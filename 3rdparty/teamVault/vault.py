@@ -24,9 +24,23 @@ class Vault(metaclass=Singleton):
         self.client.delete(name)
     def readSecret(self,name):
         return self.client.read(name)
+    def createPolicy(self, policyName, channelId, appName):
+        policy = """
+            path "sys" {
+            policy = "deny"
+            }
+
+            path "" {
+            policy = "write"
+            }
+
+            path "secret/foo" {
+            policy = "read"
+            }
+        """
 v = Vault()
 
 print (v.listPolicies())
-v.writeSecret('password','starlabs')
-print (v.readSecret('password'))
-v.deleteSecret('password')
+v.writeSecret('secret/password','starlabs')
+print (v.readSecret('secret/password'))
+v.deleteSecret('secret/password')
