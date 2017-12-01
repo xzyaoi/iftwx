@@ -114,6 +114,7 @@
 import router from "../router";
 import user from "../store/modules/user";
 import Vue from "vue";
+
 export default Vue.extend({
   name: "app",
   data: () => ({

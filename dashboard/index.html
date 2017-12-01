@@ -25,12 +25,19 @@
             m.parentNode.insertBefore(a, m)
         })(window, document, "script", ('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/b8df186d.js", "daovoice")
     </script>
-
 </head>
 
 <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
 </body>
+<script>
+    daovoice('init', {
+        app_id: "b8df186d",
+    });
+    daovoice('update');
+</script>
+<footer>
+</footer>
 
 </html>
