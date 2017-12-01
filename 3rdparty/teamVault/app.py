@@ -18,6 +18,7 @@ def basefunction():
 @app.route('/ztodo', methods=['POST'])
 def ztodo_hook():
     return ''
+
 # Smart Circle Webhook
 @app.route('/mc', methods=['POST'])
 def mcircle_hook():

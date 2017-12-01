@@ -3,7 +3,6 @@
     <v-flex xs12 sm6 offset-sm3>
       <v-card>
         <v-card-actions>
-          <v-select label="Size" :items="items" v-model="size"></v-select>
           <v-spacer></v-spacer>
         </v-card-actions>
         <v-container fluid v-bind="{ [`grid-list-xl`]: true }">
@@ -31,14 +30,7 @@
 <script>
   export default {
     data: () => ({
-      size: 'sm',
-      items: [
-        { text: 'Extra small (1px)', value: 'xs' },
-        { text: 'Small (4px)', value: 'sm' },
-        { text: 'Medium (8px)', value: 'md' },
-        { text: 'Large (16px)', value: 'lg' },
-        { text: 'Extra large (24px)', value: 'xl' }
-      ]
+      size: 'sm'
     })
   }
 </script>

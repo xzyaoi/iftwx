@@ -9,6 +9,7 @@ import Applist from '@/pages/TeamVault/Applist.vue'
 import Audit from '@/pages/TeamVault/Audit.vue'
 import Secretlist from '@/pages/TeamVault/Secretlist.vue'
 import VaultDefault from '@/pages/TeamVault/Container.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -16,7 +17,7 @@ export default new Router({
     {
       path: '/',
       name: 'Login',
-      component: Login
+      redirect: '/Login'
     },
     {
       path: '/login',
@@ -46,6 +47,7 @@ export default new Router({
         {
           path: 'vault',
           name: 'TeamVault',
+          component: Applist,
           children: [
             {
               path: 'applist',

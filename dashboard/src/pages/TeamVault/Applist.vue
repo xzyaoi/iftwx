@@ -7,7 +7,9 @@
             v-model="selected_channel"
             label="选择一个频道"
             combobox
-            :items="listedChannel"
+            :items="select_items"
+            item-value="name"
+            autocomplete
         ></v-select>
     </v-card-title>
     <v-data-table
@@ -36,6 +38,7 @@ import Vue from 'vue'
 export default Vue.extend({
   data: ()=>({
     listedChannel: [],
+    select_items:[],
     selected_channel: '',
     max25chars: (v:string) => v.length <= 25 || 'Input too long!',
     search: '',
@@ -58,10 +61,13 @@ export default Vue.extend({
     getChannels() {
       let self = this
       store.dispatch('getChannels').then(function(res){
-        console.log(res)
         self.listedChannel = res.map(function(each:Channel){
           return each.toJSON()
         })
+        self.select_items = res.map(function(each:Channel){
+          return each.toJSON().name
+        })
+        console.log(self.listedChannel)
       })
     }
   },
