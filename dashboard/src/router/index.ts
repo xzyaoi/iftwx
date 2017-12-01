@@ -5,7 +5,10 @@ import Container from '@/pages/Container.vue'
 import MessageApp from '@/pages/MessageApp.vue'
 import MyChannelPage from '@/pages/Channels/MyChannel.vue'
 import CreateChannel from '@/pages/Channels/CreateChannel.vue'
-
+import Applist from '@/pages/TeamVault/Applist.vue'
+import Audit from '@/pages/TeamVault/Audit.vue'
+import Secretlist from '@/pages/TeamVault/Secretlist.vue'
+import VaultDefault from '@/pages/TeamVault/Container.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -39,6 +42,32 @@ export default new Router({
           path: 'channel/create',
           name: 'CreateChannel',
           component: CreateChannel
+        },
+        {
+          path: 'vault',
+          name: 'TeamVault',
+          children: [
+            {
+              path: 'applist',
+              name: 'TV-Applist',
+              component: Applist
+            },
+            {
+              path: 'audit',
+              name: 'TV-Audit',
+              component: Audit
+            },
+            {
+              path: 'secret',
+              name: 'TV-Secret',
+              component: Secretlist
+            },
+            {
+              path: '',
+              name: 'TV-Default',
+              component: VaultDefault
+            }
+          ]
         }
       ]
     }

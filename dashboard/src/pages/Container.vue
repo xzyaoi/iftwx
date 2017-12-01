@@ -46,8 +46,8 @@
                 <v-list-tile-title v-if="!child.isTesting">
                   {{ child.text }}
                 </v-list-tile-title>
-                <v-badge color="green"  v-if="child.isTesting" class="testBadge">
-                  <span slot="badge" style="font-size:10px">Beta</span>
+                <v-badge color="white"  v-if="child.isTesting">
+                  <span slot="badge" style="font-size:10px;color:black">Beta</span>
                   <v-list-tile-title>
                   {{ child.text }}
                 </v-list-tile-title>
@@ -157,6 +157,8 @@ export default Vue.extend({
         router.push("/app/channel");
       } else if (contentText === "创建频道") {
         router.push("/app/channel/create");
+      } else if (contentText === "Team Vault") {
+        router.push({ name: 'TV-Default'})
       }
     }
   }

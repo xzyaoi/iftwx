@@ -31,11 +31,11 @@ class Vault(metaclass=Singleton):
                 policy = "deny"
             }
 
-            path "{{channelId}}/{{appName}}" {
+            path "{{channelId}}/{{appName}}/*" {
                 policy = "write"
             }
 
-            path "{{channelId}}/{{appName}}" {
+            path "{{channelId}}/{{appName}}/*" {
                 policy = "read"
             }
         """)
