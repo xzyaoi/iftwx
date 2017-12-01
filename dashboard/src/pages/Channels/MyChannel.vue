@@ -65,7 +65,7 @@ export default Vue.extend({
       { text: "频道名", value: "name", align: "left" },
       { text: "创建时间", value: "createdAt", align: "left" },
       { text: "关注人数", value: "follower", align: "left" },
-      { text: "二维码", align: "left" }
+      { text: "操作", align: "left" }
     ]
   }),
   methods: {
