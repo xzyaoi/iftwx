@@ -47,7 +47,7 @@
                   {{ child.text }}
                 </v-list-tile-title>
                 <v-badge color="white"  v-if="child.isTesting">
-                  <span slot="badge" style="font-size:10px;color:black">Beta</span>
+                  <span slot="badge" style="font-size:10px;color:black">Beta!</span>
                   <v-list-tile-title>
                   {{ child.text }}
                 </v-list-tile-title>
