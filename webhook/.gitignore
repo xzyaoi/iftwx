@@ -1,2 +1,9 @@
 /.vscode
 /.leancloud
+.git/
+.DS_Store
+.avoscloud/
+.leancloud/
+venv
+*.pyc
+__pycache__/
