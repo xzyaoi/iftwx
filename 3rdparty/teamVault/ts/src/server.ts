@@ -1,6 +1,7 @@
 import * as http from "http"
 import * as socketIo from "socket.io"
 import * as Koa from "koa"
+import { Message } from "./model";
 
 export class Server {
     public static readonly PORT: number = 8080
@@ -29,7 +30,30 @@ export class Server {
     }
     private listen():void {
         this.server.listen(this.port, () => {
-            console.log('Running server on port %s', this.port);
+            console.log('Running Server on port %s', this.port);
         });
+        this.io.on('connect', (socket: any) => {
+            console.log('Connected client on port %s.', this.port);
+            console.log('With socket:')
+            console.log(socket)
+            socket.on('message', (m: Message) => {
+                console.log('[Server](message): %s', JSON.stringify(m));
+                this.io.emit('message', m);
+            });
+            socket.on('requireAuth',(m, Message) => {
+                console.log('[Auth Required]')                
+                console.log('[Auth](message): %s', JSON.stringify(m));
+                
+            });
+            socket.on('authComplete',(m, Message) => {
+                console.log('[Auth Completed]')
+                console.log('[Auth](message): %s')
+            })
+            socket.on('disconnect', () => {
+                console.log('Client Disconnected');
+            });
+        });
+        
+        this.io.on('')
     }
 }
