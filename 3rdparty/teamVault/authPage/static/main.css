@@ -1,0 +1,11 @@
+.round_pic {
+    border-radius: 50%;
+}
+
+.user_avatar {
+    max-width: 30%;
+}
+
+.cell-item-left {
+    align-items: left;
+}
