@@ -58,8 +58,8 @@
                 </div>
                 <div class="weui-msg__opr-area">
                     <p class="weui-btn-area">
-                        <a href="javascript:history.back();" class="weui-btn weui-btn_primary">允许</a>
-                        <a href="javascript:history.back();" class="weui-btn weui-btn_default">拒绝</a>
+                        <a href="javascript:authPasskey();" class="weui-btn weui-btn_primary">允许</a>
+                        <a href="javascript:denyPasskey();" class="weui-btn weui-btn_default">拒绝</a>
                     </p>
                 </div>
                 <div class="weui-msg__extra-area">
@@ -74,6 +74,7 @@
 <footer>
     <script>
         getUserInfo()
+        initSocket()
     </script>
 </footer>
 
