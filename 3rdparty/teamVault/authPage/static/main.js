@@ -26,7 +26,16 @@ function getUserInfo() {
             document.getElementById('apply_by').innerHTML = document.getElementById('apply_by').innerHTML.replace('{username}', data.nickName)
         },
         error: function(xhr, type) {
-            alert('Ajax error!')
+            console.log(xhr)
+            console.log(type)
         }
     })
+}
+
+function initSocket() {
+    var socket = io.connect('http://localhost');
+    socket.on('news', function(data) {
+        console.log(data);
+        socket.emit('my other event', { my: 'data' });
+    });
 }
