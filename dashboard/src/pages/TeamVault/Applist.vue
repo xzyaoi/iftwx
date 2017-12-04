@@ -10,7 +10,18 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12>
-                <v-text-field label="保险柜名称" required></v-text-field>
+                <v-select
+                  v-model="create_selected_channel"
+                  label="选择一个频道*"
+                  combobox
+                  :items="select_items"
+                  item-value="name"
+                  autocomplete
+                  v-bind:error-messages="['请选择一个频道']"
+                ></v-select>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field label="保险柜名称" required v-model="vault_name"></v-text-field>
               </v-flex>
               <v-flex xs12>
                 <v-checkbox label="是否公开" v-model="is_public" light></v-checkbox>
@@ -22,7 +33,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click.native="is_create_dialog_open = false">放弃</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="is_create_dialog_open = false">完成</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="submitVault()">完成</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -70,10 +81,11 @@
 </template>
 
 <script lang="ts">
-import store from "../../store";
-import router from "../../router";
-import { Channel } from "../../models/channel";
-import Vue from "vue";
+import store from "../../store"
+import router from "../../router"
+import { Channel } from "../../models/channel"
+import Vue from "vue"
+import { Vault, CreateVaultPayload } from "../../models/vault"
 export default Vue.extend({
   data: () => ({
     listedChannel: [],
@@ -81,7 +93,9 @@ export default Vue.extend({
     selected_channel: "",
     is_create_dialog_open : false,
     is_public: false,
-    max25chars: (v: string) => v.length <= 25 || "Input too long!",
+    vault_name:'',
+    create_selected_channel:'',
+    max25chars: (v: string) => v.length <= 25 || "太长啦",
     search: "",
     tmp: "",
     pagination: {},
@@ -101,6 +115,27 @@ export default Vue.extend({
     createVault() {
       this.is_create_dialog_open = true
     },
+    submitVault() {
+      let channel_id = ''
+      for(let each of this.select_items) {
+        console.log(each)
+        //if (each.name === this.create_selected_channel) {
+        //  channel_id = each.objectId
+        //}
+      }
+      console.log(this.create_selected_channel)
+      if(this.create_selected_channel === "") {
+        return;
+      }
+      this.is_create_dialog_open = false
+      let create_vault_payload: CreateVaultPayload = {
+        vault_name: this.vault_name,
+        channel_id:channel_id,
+        is_public: this.is_public
+      }
+      console.log(create_vault_payload)
+      //store.dispatch("createVault", create_vault_payload)
+    },
     getChannels() {
       let self = this;
       store.dispatch("getChannels").then(function(res) {
@@ -108,9 +143,8 @@ export default Vue.extend({
           return each.toJSON();
         });
         self.select_items = res.map(function(each: Channel) {
-          return each.toJSON().name;
+          return each.toJSON();
         });
-        console.log(self.listedChannel);
       });
     }
   },

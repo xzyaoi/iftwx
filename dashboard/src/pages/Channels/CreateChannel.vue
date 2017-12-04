@@ -95,7 +95,7 @@
 <script lang="ts">
 import { Parse } from '../../apis/parse'
 import Vue from 'vue'
-import { Channel } from '../../models/channel'
+import { Channel, CreateChannelPayload } from '../../models/channel'
 export default Vue.extend({
   data: ()=>({
     create_step:1,
@@ -136,7 +136,7 @@ export default Vue.extend({
       } else {
         app_id = 'dLy5IeZT9H'
       }
-      let channel_payload = {
+      let channel_payload : CreateChannelPayload = {
         channel_name: this.channel_name,
         app_id: app_id
       }
