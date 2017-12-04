@@ -65,7 +65,7 @@ const actions: ActionTree<State, object> = {
                   resolve(_channel)
                 },
                 error: function(err: Error) {
-                  console.log(err)
+                  console.warn(err)
                   reject(err)
                 }
               })
@@ -73,7 +73,7 @@ const actions: ActionTree<State, object> = {
           })
         },
         error: function(err: Error) {
-          console.log(err)
+          console.warn(err)
           reject(err)
         }
       })
