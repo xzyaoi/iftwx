@@ -1,4 +1,14 @@
 <template>
+<div class="container">
+      <v-breadcrumbs>
+      <v-icon slot="divider">chevron_right</v-icon>
+      <v-breadcrumbs-item>
+        频道管理
+      </v-breadcrumbs-item>
+      <v-breadcrumbs-item>
+        创建频道
+      </v-breadcrumbs-item>
+    </v-breadcrumbs>
 <v-stepper v-model="create_step" vertical class="create_channel_container">
     <v-stepper-step step="1" v-bind:complete="create_step > 1">
       选择一个应用
@@ -79,6 +89,7 @@
       <v-btn flat @click.native="previous(2)">上一步</v-btn>
     </v-stepper-content>
   </v-stepper>
+  </div>
 </template>
 
 <script lang="ts">

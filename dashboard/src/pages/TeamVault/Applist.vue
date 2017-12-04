@@ -1,5 +1,15 @@
 <template>
-<v-card class="channel_container">
+<div class="container">
+      <v-breadcrumbs>
+      <v-icon slot="divider">chevron_right</v-icon>
+      <v-breadcrumbs-item>
+        Team Vault
+      </v-breadcrumbs-item>
+      <v-breadcrumbs-item>
+        目录列表
+      </v-breadcrumbs-item>
+    </v-breadcrumbs>
+    <v-card class="channel_container">
     <v-card-title>
       我的应用
       <v-spacer></v-spacer>
@@ -11,6 +21,7 @@
             item-value="name"
             autocomplete
         ></v-select>
+        <v-btn color="green darken-1" flat="flat">创建目录</v-btn>
     </v-card-title>
     <v-data-table
         v-bind:headers="headers"
@@ -28,6 +39,7 @@
       </template>
     </v-data-table>
   </v-card>
+</div>
 </template>
 
 <script lang="ts">

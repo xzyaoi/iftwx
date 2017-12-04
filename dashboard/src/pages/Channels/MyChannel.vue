@@ -1,4 +1,14 @@
 <template>
+<div class="container">
+      <v-breadcrumbs>
+      <v-icon slot="divider">chevron_right</v-icon>
+      <v-breadcrumbs-item>
+        频道管理
+      </v-breadcrumbs-item>
+      <v-breadcrumbs-item>
+        频道列表
+      </v-breadcrumbs-item>
+    </v-breadcrumbs>
 <v-card class="channel_container">
     <v-card-title>
       我的频道
@@ -39,6 +49,7 @@
       </v-card>
     </v-dialog>
   </v-card>
+  </div>
 </template>
 
 <script lang="ts">

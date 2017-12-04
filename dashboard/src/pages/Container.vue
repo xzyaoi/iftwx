@@ -101,7 +101,7 @@
       </v-btn>
     </v-toolbar>
     <v-content>
-      <v-container fluid fill-height>
+      <v-container fluid>
         <v-layout>
           <router-view></router-view>
         </v-layout>
@@ -159,7 +159,7 @@ export default Vue.extend({
       } else if (contentText === "创建频道") {
         router.push("/app/channel/create");
       } else if (contentText === "Team Vault") {
-        router.push({ name: 'TV-Default'})
+        router.push("/app/vault/default")
       }
     }
   }
@@ -173,7 +173,6 @@ export default Vue.extend({
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 .testBadge {
 

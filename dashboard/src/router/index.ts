@@ -8,7 +8,7 @@ import CreateChannel from '@/pages/Channels/CreateChannel.vue'
 import Applist from '@/pages/TeamVault/Applist.vue'
 import Audit from '@/pages/TeamVault/Audit.vue'
 import Secretlist from '@/pages/TeamVault/Secretlist.vue'
-import VaultDefault from '@/pages/TeamVault/Container.vue'
+import VaultDefault from '@/pages/TeamVault/Layout.vue'
 
 Vue.use(Router)
 
@@ -47,7 +47,7 @@ export default new Router({
         {
           path: 'vault',
           name: 'TeamVault',
-          component: Applist,
+          component: VaultDefault,
           children: [
             {
               path: 'applist',
@@ -65,9 +65,9 @@ export default new Router({
               component: Secretlist
             },
             {
-              path: '',
+              path: 'default',
               name: 'TV-Default',
-              component: VaultDefault
+              component: Applist
             }
           ]
         }

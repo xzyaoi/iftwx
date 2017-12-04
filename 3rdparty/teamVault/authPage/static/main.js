@@ -78,3 +78,11 @@ function denyPasskey() {
     }
     socket.emit('auth_denied', { data: '123' })
 }
+
+function getOpenId() {
+    var code = getUrlParam("")
+}
+
+function initWechat() {
+
+}
