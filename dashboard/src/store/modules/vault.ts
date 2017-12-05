@@ -7,12 +7,12 @@ import { Vault, Secret, CreateVaultPayload } from '../../models/vault'
 import user from './user';
 
 export interface State {
-    sessionToken: string;
+    my_vaults: Array<Vault>;
 }
 
 
 const state: State = {
-  sessionToken: ''
+  my_vaults: []
 }
 
 const getters = {
@@ -58,12 +58,36 @@ const actions: ActionTree<State, object> = {
         }
       })
     })
+  },
+  getVaults({commit}, secret = user.state.current_user.id) {
+    return new Promise((resolve, reject) => {
+      let query = new Parse.Query(Vault)
+      let user_query = new Parse.Query(ParseUser)
+      user_query.get(secret, {
+        success: function(res: ParseUser) {
+          query.equalTo('createdBy', res)
+          query.find({
+            success: function(results: Array<Vault>) {
+              resolve(results)
+              commit(types.VAULTS, results)
+            },
+            error: function(err: Error) {
+              console.log(err)
+              reject(err)
+            }
+          })
+        },
+        error: function(err: Error) {
+          reject(err)
+        }
+      })
+    })
   }
 }
 
 const mutations = {
-  [types.SESSION_TOKEN](_state: State, session: string) {
-    _state.sessionToken = session
+  [types.VAULTS](_state: State, vaults: Array<Vault>) {
+    _state.my_vaults = vaults
   }
 }
 export default {

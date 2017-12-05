@@ -17,7 +17,6 @@
                   :items="select_items_name"
                   item-value="name"
                   autocomplete
-                  v-bind:error-messages="['请选择一个频道']"
                 ></v-select>
               </v-flex>
               <v-flex xs12>
@@ -28,7 +27,8 @@
               </v-flex>
             </v-layout>
           </v-container>
-          <small>* 为必填项</small>
+          * 为必填项</br>
+          * 设定为公开将允许频道的关注者查看
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -63,14 +63,13 @@
     </v-card-title>
     <v-data-table
         v-bind:headers="headers"
-        v-bind:items="listedChannel"
+        v-bind:items="listedVault"
         v-bind:search="search"
       >
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.objectId }}</td>
         <td class="text-xs-left">{{ props.item.name }}</td>
         <td class="text-xs-left">{{ props.item.createdAt }}</td>
-        <td class="text-xs-left">{{ props.item.follower.length }}</td>
       </template>
       <template slot="pageText" slot-scope="{ pageStart, pageStop }">
         From {{ pageStart }} to {{ pageStop }}
@@ -88,7 +87,7 @@ import Vue from "vue"
 import { Vault, CreateVaultPayload } from "../../models/vault"
 export default Vue.extend({
   data: () => ({
-    listedChannel: [],
+    listedVault: [],
     select_items: [],
     select_items_name:[],
     selected_channel: "",
@@ -102,14 +101,13 @@ export default Vue.extend({
     pagination: {},
     headers: [
       {
-        text: "频道ID",
+        text: "保险柜ID",
         align: "left",
         sortable: false,
         value: "objectId"
       },
-      { text: "频道名", value: "name", align: "left" },
+      { text: "保险柜名", value: "name", align: "left" },
       { text: "创建时间", value: "createdAt", align: "left" },
-      { text: "关注人数", value: "follower", align: "left" }
     ]
   }),
   methods: {
@@ -133,15 +131,14 @@ export default Vue.extend({
         channel_id:channel_id,
         is_public: this.is_public
       }
-      console.log(create_vault_payload)
       store.dispatch("createVault", create_vault_payload).then(function(res){
         console.log(res)
       })
     },
     getChannels() {
       let self = this;
-      store.dispatch("getChannels").then(function(res) {
-        self.listedChannel = res.map(function(each: Channel) {
+      store.dispatch("getVaults").then(function(res) {
+        self.listedVault = res.map(function(each: Channel) {
           return each.toJSON()
         });
         self.select_items = res.map(function(each: Channel) {
