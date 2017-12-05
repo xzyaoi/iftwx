@@ -31,4 +31,6 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 ## Contribution
 
-Code Style
+### Code Style
+
+Since Dashboard is a `Typescript` Project, You are required not to using `any`.

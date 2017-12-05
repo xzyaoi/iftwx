@@ -6,7 +6,18 @@ class Channel extends POJ {
     super('Channel', options)
     this.className = 'Channel'
   }
-
+  get name():string {
+    return this.name
+  }
+  set name(name:string) {
+    this.name = name
+  }
+  get objectId():string {
+    return this.objectId
+  }
+  set objectId(objectId:string) {
+    this.objectId = objectId
+  }
 }
 
 interface CreateChannelPayload {

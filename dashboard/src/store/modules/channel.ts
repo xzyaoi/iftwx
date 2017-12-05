@@ -11,11 +11,13 @@ import { App } from '../../models/app'
 interface State {
   current_channel: Channel;
   my_channels: Array<Channel>;
+  attended_channels: Array<Channel>;
 }
 
 const state: State = {
   current_channel: new Channel(),
-  my_channels: []
+  my_channels: [],
+  attended_channels:[]
 }
 
 const getters = {
@@ -89,12 +91,43 @@ const actions: ActionTree<State, object> = {
         reject(err)
       })
     })
+  },
+  getAttendedChannels({ commit }, user_ctx:ParseUser = user.state.current_user) {
+    return new Promise((resolve, reject) => {
+      let user_query = new Parse.Query(ParseUser)
+      user_query.equalTo('wxOpenId',user_ctx.toJSON().wxOpenId)
+      user_query.first({
+        success: function(res: ParseUser) {
+          console.log(res)
+          let query = new Parse.Query(Channel)
+          query.equalTo('follower', user_ctx.toJSON().wxOpenId)
+          query.notEqualTo('createdBy',res)
+          query.find({
+            success: function(results: Array<Channel>) {
+              console.log(results)
+              resolve(results)
+              commit(types.ATTENDED_CHANNELS, results)
+            },
+            error: function(err: Error) {
+              console.log(err)
+              reject(err)
+            }
+          })
+        },
+        error: function(err: Error) {
+          reject(err)
+        }
+      })
+    })
   }
 }
 
 const mutations = {
   [types.CHANNELS](_state: State, channels: Array<Channel>) {
     _state.my_channels = channels
+  },
+  [types.ATTENDED_CHANNELS](_state: State, channels: Array<Channel>) {
+    _state.attended_channels = channels
   }
 }
 export default {

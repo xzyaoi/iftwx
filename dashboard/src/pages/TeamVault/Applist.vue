@@ -119,7 +119,7 @@ export default Vue.extend({
         return;
       }
       let channel_id = ''
-      let vault_items:Array<any> = this.select_items
+      let vault_items:Array<Channel> = this.select_items
       for(let index in vault_items) {
         if (vault_items[index].name === this.create_selected_channel) {
           channel_id = vault_items[index].objectId

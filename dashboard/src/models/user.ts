@@ -5,6 +5,12 @@ class ParseUser extends Parse.User {
     super(className, options)
     this.className = '_User'
   }
+  get wxOpenId():string {
+    return this.wxOpenId
+  }
+  set wxOpenId(wxOpenId:string) {
+    this.wxOpenId = wxOpenId
+  }
 }
 
 export {

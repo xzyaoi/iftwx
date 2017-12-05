@@ -44,12 +44,12 @@
         Team Vault
       </v-breadcrumbs-item>
       <v-breadcrumbs-item>
-        保险柜列表
+        {{vault_name}}
       </v-breadcrumbs-item>
     </v-breadcrumbs>
   <v-card class="channel_container">
   <v-card-title>
-    我的保险柜
+    {{vault_name}}
       <v-spacer></v-spacer>
         <v-select
             v-model="selected_channel"
@@ -59,7 +59,7 @@
             item-value="name"
             autocomplete
         ></v-select>
-        <v-btn color="blue darken-1" flat="flat" @click="createVault">创建保险柜</v-btn>
+        <v-btn color="blue darken-1" flat="flat" @click="createVault">创建密码</v-btn>
     </v-card-title>
     <v-data-table
         v-bind:headers="headers"
