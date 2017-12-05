@@ -17,9 +17,14 @@ class Secret extends POJ {
 }
 
 interface CreateVaultPayload {
-    vault_name: string;
-    channel_id: string;
-    is_public: boolean;
+  vault_name: string;
+  channel_id: string;
+  is_public: boolean;
+}
+
+interface CreateSecretPayload {
+  secret_name: string;
+  vault_id: string;
 }
 
 export {

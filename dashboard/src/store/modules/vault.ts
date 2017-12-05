@@ -82,6 +82,9 @@ const actions: ActionTree<State, object> = {
         }
       })
     })
+  },
+  getAttendedVaults({commit}, secret = user.state.current_user.id) {
+
   }
 }
 

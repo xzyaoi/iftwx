@@ -4,7 +4,7 @@
     <v-dialog v-model="is_create_dialog_open" max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">创建保险柜</span>
+          <span class="headline">创建密码</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
@@ -12,7 +12,7 @@
               <v-flex xs12>
                 <v-select
                   v-model="create_selected_channel"
-                  label="选择一个频道*"
+                  label="选择一个保险柜*"
                   combobox
                   :items="select_items_name"
                   item-value="name"
@@ -20,20 +20,16 @@
                 ></v-select>
               </v-flex>
               <v-flex xs12>
-                <v-text-field label="保险柜名称" required v-model="vault_name"></v-text-field>
-              </v-flex>
-              <v-flex xs12>
-                <v-checkbox label="是否公开" v-model="is_public" light></v-checkbox>
+                <v-text-field label="密码标题" required v-model="vault_name"></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
-          * 为必填项</br>
-          * 设定为公开将允许频道的关注者查看
+          * 为必填项
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click.native="is_create_dialog_open = false">放弃</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="submitVault()">完成</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="submitSecret()">完成</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

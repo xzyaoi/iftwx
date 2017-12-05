@@ -35,7 +35,7 @@
         <td class="text-xs-left"><v-btn v-if="props.item.created" flat color="primary" @click="getQRCode(props.item.objectId)">二维码</v-btn></td>
       </template>
       <template slot="pageText" slot-scope="{ pageStart, pageStop }">
-        从 {{ pageStart }} 到 {{ pageStop }}
+        从第 {{ pageStart }} 个到第 {{ pageStop }} 个
       </template>
     </v-data-table>
         <v-dialog v-model="isQrcodeOpen" max-width="450">
