@@ -14,7 +14,7 @@
                   v-model="create_selected_channel"
                   label="选择一个频道*"
                   combobox
-                  :items="select_items"
+                  :items="select_items_name"
                   item-value="name"
                   autocomplete
                   v-bind:error-messages="['请选择一个频道']"
@@ -55,7 +55,7 @@
             v-model="selected_channel"
             label="选择一个频道"
             combobox
-            :items="select_items"
+            :items="select_items_name"
             item-value="name"
             autocomplete
         ></v-select>
@@ -90,6 +90,7 @@ export default Vue.extend({
   data: () => ({
     listedChannel: [],
     select_items: [],
+    select_items_name:[],
     selected_channel: "",
     is_create_dialog_open : false,
     is_public: false,
@@ -116,16 +117,15 @@ export default Vue.extend({
       this.is_create_dialog_open = true
     },
     submitVault() {
-      let channel_id = ''
-      for(let each of this.select_items) {
-        console.log(each)
-        //if (each.name === this.create_selected_channel) {
-        //  channel_id = each.objectId
-        //}
-      }
-      console.log(this.create_selected_channel)
       if(this.create_selected_channel === "") {
         return;
+      }
+      let channel_id = ''
+      let vault_items:Array<any> = this.select_items
+      for(let index in vault_items) {
+        if (vault_items[index].name === this.create_selected_channel) {
+          channel_id = vault_items[index].objectId
+        }
       }
       this.is_create_dialog_open = false
       let create_vault_payload: CreateVaultPayload = {
@@ -134,16 +134,21 @@ export default Vue.extend({
         is_public: this.is_public
       }
       console.log(create_vault_payload)
-      //store.dispatch("createVault", create_vault_payload)
+      store.dispatch("createVault", create_vault_payload).then(function(res){
+        console.log(res)
+      })
     },
     getChannels() {
       let self = this;
       store.dispatch("getChannels").then(function(res) {
         self.listedChannel = res.map(function(each: Channel) {
-          return each.toJSON();
+          return each.toJSON()
         });
         self.select_items = res.map(function(each: Channel) {
-          return each.toJSON();
+          return each.toJSON()
+        });
+        self.select_items_name = res.map(function(each: Channel) {
+          return each.toJSON().name
         });
       });
     }

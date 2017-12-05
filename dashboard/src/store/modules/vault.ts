@@ -21,13 +21,16 @@ const getters = {
 
 const actions: ActionTree<State, object> = {
   createVault({ commit }, payload: CreateVaultPayload) {
+    console.log(payload)
     return new Promise((resolve, reject) => {
       let user_query = new Parse.Query(ParseUser)
       user_query.get(user.state.current_user.id, {
         success: function(res: ParseUser) {
+          console.log(res)
           let channel_query = new Parse.Query(Channel)
-          channel_query.equalTo(payload.channel_id, {
+          channel_query.get(payload.channel_id, {
             success: function(channel: Channel) {
+              console.log(channel)
               let vault = new Vault()
               vault.set('channel', channel)
               vault.set('createdBy', res)
@@ -42,6 +45,10 @@ const actions: ActionTree<State, object> = {
                   reject(err)
                 }
               })
+            },
+            error:function(err: Error) {
+              console.log(err)
+              reject(err)
             }
           })
         },

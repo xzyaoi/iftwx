@@ -4,6 +4,7 @@ import * as mutations from './mutations'
 
 import user from './modules/user'
 import channel from './modules/channel'
+import vault from './modules/vault'
 
 Vue.use(Vuex)
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
   modules: {
     user,
     channel,
+    vault
   },
   strict: debug,
 });

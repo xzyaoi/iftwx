@@ -6,6 +6,7 @@ class Channel extends POJ {
     super('Channel', options)
     this.className = 'Channel'
   }
+
 }
 
 interface CreateChannelPayload {
