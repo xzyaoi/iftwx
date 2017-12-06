@@ -68,7 +68,7 @@ const actions: ActionTree<State, object> = {
                 },
                 error: function(err: Error) {
                   console.warn(err)
-                  reject(err)
+                   reject(err)
                 }
               })
             }

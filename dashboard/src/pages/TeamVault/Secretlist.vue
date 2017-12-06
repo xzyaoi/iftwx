@@ -68,7 +68,7 @@
         <td class="text-xs-left">{{ props.item.createdAt }}</td>
       </template>
       <template slot="pageText" slot-scope="{ pageStart, pageStop }">
-        From {{ pageStart }} to {{ pageStop }}
+        从第 {{ pageStart }} 个到第 {{ pageStop }} 个
       </template>
     </v-data-table>
   </v-card>

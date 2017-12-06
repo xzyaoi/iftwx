@@ -14,8 +14,9 @@
                   v-model="create_selected_channel"
                   label="选择一个频道*"
                   combobox
-                  :items="select_items_name"
+                  :items="listedChannel"
                   item-value="name"
+                  item-text="name"
                   autocomplete
                 ></v-select>
               </v-flex>
@@ -54,22 +55,23 @@
         <v-select
             v-model="selected_channel"
             label="选择一个频道"
+            item-text="name"
+            item-vaule="objectId"
             combobox
-            :items="select_items_name"
-            item-value="name"
+            :items="listedChannel"
             autocomplete
         ></v-select>
         <v-btn color="blue darken-1" flat="flat" @click="createVault">创建保险柜</v-btn>
     </v-card-title>
     <v-data-table
         v-bind:headers="headers"
-        v-bind:items="listedVault"
-        v-bind:search="search"
+        v-bind:items="listedVaults"
       >
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.objectId }}</td>
         <td class="text-xs-left">{{ props.item.name }}</td>
         <td class="text-xs-left">{{ props.item.createdAt }}</td>
+        <td class="text-xs-left"><v-btn flat color="primary" @click="viewDetail(props.item.objectId)">查看</v-btn></td>
       </template>
       <template slot="pageText" slot-scope="{ pageStart, pageStop }">
         From {{ pageStart }} to {{ pageStop }}
@@ -87,14 +89,18 @@ import Vue from "vue"
 import { Vault, CreateVaultPayload } from "../../models/vault"
 export default Vue.extend({
   data: () => ({
-    listedVault: [],
-    select_items: [],
-    select_items_name:[],
+    listedVaults: [],
+    select_items_name: [],
+    myChannel: [],
+    myVaults: [],
+    attendedVaults: [],
+    listedChannel: [],
+    attendedChannel: [],
     selected_channel: "",
     is_create_dialog_open : false,
     is_public: false,
-    vault_name:'',
-    create_selected_channel:'',
+    vault_name: '',
+    create_selected_channel: '',
     max25chars: (v: string) => v.length <= 25 || "太长啦",
     search: "",
     tmp: "",
@@ -119,7 +125,7 @@ export default Vue.extend({
         return;
       }
       let channel_id = ''
-      let vault_items:Array<Channel> = this.select_items
+      let vault_items:Array<Channel> = this.listedChannel
       for(let index in vault_items) {
         if (vault_items[index].name === this.create_selected_channel) {
           channel_id = vault_items[index].objectId
@@ -135,23 +141,46 @@ export default Vue.extend({
         console.log(res)
       })
     },
+    viewDetail(objectId:string) {
+
+    },
     getChannels() {
       let self = this;
-      store.dispatch("getVaults").then(function(res) {
-        self.listedVault = res.map(function(each: Channel) {
+      store.dispatch("getChannels").then(function(res) {
+        self.myChannel = res.map(function(each: Channel) {
           return each.toJSON()
-        });
-        self.select_items = res.map(function(each: Channel) {
-          return each.toJSON()
-        });
-        self.select_items_name = res.map(function(each: Channel) {
-          return each.toJSON().name
-        });
-      });
+        })
+      }).then(function() {
+        store.dispatch("getAttendedChannels").then(function(res){
+          self.attendedChannel = res.map(function(each:Channel) {
+            return each.toJSON()
+          })
+        }).then(function() {
+          self.listedChannel = self.myChannel.concat(self.attendedChannel)
+        })
+      })
+    },
+    getVaults(){
+      let self = this;
+      store.dispatch("getMyVaults").then(function(res) {
+        self.myVaults = res.map(function(each: Vault) {
+          return Object.assign(each.toJSON(),{created:true})
+        })
+        }).then(function() {
+          store.dispatch("getAttendedVaults").then(function(res) {
+            self.attendedVaults = res.map(function(each: Vault) {
+              return Object.assign(each.toJSON(),{created:false})
+            })
+          }).then(function(){
+            self.listedVaults = self.myVaults.concat(self.attendedVaults)
+          console.log(self.listedVaults)
+          })
+      })
     }
   },
   created() {
-    this.getChannels();
+    this.getChannels()
+    this.getVaults()
   }
 });
 </script>

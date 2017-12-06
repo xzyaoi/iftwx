@@ -5,7 +5,7 @@ import { ParseUser }  from '../../models/user'
 import { Channel }  from '../../models/channel'
 import { Vault, Secret, CreateVaultPayload } from '../../models/vault'
 import user from './user';
-
+import channel from './channel'
 export interface State {
     my_vaults: Array<Vault>;
 }
@@ -17,6 +17,21 @@ const state: State = {
 
 const getters = {
 
+}
+
+function getVaultByChannel(channel:Channel):any {
+  return new Promise((resolve, reject)=>{
+    let vault_query = new Parse.Query(Vault)
+    vault_query.equalTo('channel',channel)
+    vault_query.find({
+      success:function(res:Vault){
+        resolve(res)
+      },
+      error:function(err:Error) {
+        reject(err)
+      }
+    })
+  })
 }
 
 const actions: ActionTree<State, object> = {
@@ -59,7 +74,7 @@ const actions: ActionTree<State, object> = {
       })
     })
   },
-  getVaults({commit}, secret = user.state.current_user.id) {
+  getMyVaults({commit}, secret = user.state.current_user.id) {
     return new Promise((resolve, reject) => {
       let query = new Parse.Query(Vault)
       let user_query = new Parse.Query(ParseUser)
@@ -69,10 +84,11 @@ const actions: ActionTree<State, object> = {
           query.find({
             success: function(results: Array<Vault>) {
               resolve(results)
-              commit(types.VAULTS, results)
+              commit(types.VAULTS, results.map(function(each){
+                return each.toJSON()
+              }))
             },
             error: function(err: Error) {
-              console.log(err)
               reject(err)
             }
           })
@@ -84,7 +100,17 @@ const actions: ActionTree<State, object> = {
     })
   },
   getAttendedVaults({commit}, secret = user.state.current_user.id) {
-
+    return new Promise((resolve, reject)=>{
+      let attended_channels = channel.state.attended_channels
+      let acquire_channels_promise:Array<any> = []
+      for (let index in attended_channels) {
+        let p_acquire = getVaultByChannel(attended_channels[index])
+        acquire_channels_promise.push(p_acquire)
+      }
+      Promise.all(acquire_channels_promise).then(vaules=>{
+        resolve(vaules)
+      })
+    })
   }
 }
 

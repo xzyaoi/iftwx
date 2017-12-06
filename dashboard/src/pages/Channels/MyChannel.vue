@@ -104,7 +104,6 @@ export default Vue.extend({
     getChannels() {
       let self = this;
       store.dispatch("getChannels").then(function(res) {
-        console.log(res);
         self.myChannel = res.map(function(each: Channel) {
           return each.toJSON()
         })
@@ -112,7 +111,6 @@ export default Vue.extend({
           return Object.assign(each,{created:true})
         })
         store.dispatch("getAttendedChannels").then(function(res){
-          console.log(res)
           self.attendedChannel = res.map(function(each: Channel) {
             return each.toJSON()
           })
