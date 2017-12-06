@@ -62,7 +62,10 @@ export default new Router({
             {
               path: 'secret',
               name: 'TV-Secret',
-              component: Secretlist
+              component: Secretlist,
+              meta:{
+                requireAuth:true
+              }
             },
             {
               path: 'default',

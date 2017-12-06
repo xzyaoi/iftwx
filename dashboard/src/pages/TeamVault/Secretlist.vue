@@ -76,10 +76,10 @@
 </template>
 
 <script lang="ts">
+import Vue from "vue"
 import store from "../../store"
 import router from "../../router"
 import { Channel } from "../../models/channel"
-import Vue from "vue"
 import { Vault, CreateVaultPayload } from "../../models/vault"
 export default Vue.extend({
   data: () => ({

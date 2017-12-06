@@ -3,7 +3,7 @@ import * as types from '../mutation-types'
 import { Parse } from '../../apis/index'
 import { ParseUser }  from '../../models/user'
 import { Channel }  from '../../models/channel'
-import { Vault, Secret, CreateVaultPayload } from '../../models/vault'
+import { Vault, Secret, CreateVaultPayload, CreateSecretPayload } from '../../models/vault'
 import user from './user';
 import channel from './channel'
 export interface State {
@@ -109,6 +109,37 @@ const actions: ActionTree<State, object> = {
       }
       Promise.all(acquire_channels_promise).then(vaules=>{
         resolve(vaules)
+      })
+    })
+  },
+
+  createSecret({commit},payload:CreateSecretPayload) {
+    return new Promise((resolve, reject) => {
+      if(typeof user.state.current_user === 'undefined' || user.state.current_user === null ){
+        reject('user not logined')
+      }
+      let vault_query = new Parse.Query(Vault)
+      vault_query.equalTo('objectId',payload.vault_id)
+      vault_query.find({
+        success: function(res:Vault){
+          let secret = new Secret()
+          let createdBy = new ParseUser()
+          secret.set('vault',Vault)
+          createdBy.set('id',user.state.current_user.id)
+          secret.set("createdBy" , createdBy)
+          secret.set("name",payload.secret_name)
+          secret.save(null, {
+            success: function(_secret:Secret){
+              resolve(_secret)
+            },
+            error: function(err: Error) {
+              reject(err)
+            }
+          })
+        },
+        error: function(err:Error){
+          reject(err)
+        }
       })
     })
   }

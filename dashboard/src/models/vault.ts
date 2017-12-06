@@ -25,10 +25,12 @@ interface CreateVaultPayload {
 interface CreateSecretPayload {
   secret_name: string;
   vault_id: string;
+
 }
 
 export {
   Vault,
   Secret,
-  CreateVaultPayload
+  CreateVaultPayload,
+  CreateSecretPayload
 }
