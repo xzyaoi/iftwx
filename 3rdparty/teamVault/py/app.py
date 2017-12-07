@@ -59,3 +59,6 @@ def acquireToken():
         vaultName = data['vaultName']
         token = v.generateToken(channelId,vaultName)
     return token
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5001)
