@@ -14,6 +14,9 @@ class Vault(metaclass=Singleton):
     def __init__(self):
         self.client = hvac.Client(url=VAULT_URL)
 
+    def loginWithDefaultToken(self):
+        self.client = config.ROOT_TOKEN
+
     def auth(self,token):
         self.client = token
 
@@ -29,44 +32,45 @@ class Vault(metaclass=Singleton):
     def isAuthenticated(self):
         return self.client.is_authenticated()
 
-    def writeSecret(self, name, secret, lease=None):
+    def writeSecret(self, channelId, vaultName, secretName, secret, lease=None):
+        pname = self.getPolicyName(channelId, vaultName)
         if lease is None:
-            self.client.write(name,value=secret)
+            self.client.write(pname+secretName,value=secret)
         else:
-            self.client.write(name,value=secret,lease=lease)
+            self.client.write(pname+secretName,value=secret,lease=lease)
 
     def deleteSecret(self, name):
         self.client.delete(name)
 
-    def readSecret(self,name):
-        return self.client.read(name)
+    def readSecret(self,channelId, vaultName, secretName):
+        pname = self.getPolicyName(channelId, vaultName)
+        return self.client.read(pname)
 
-    def getPolicyName(channelId,appName):
-        return channelId+appName
+    def getPolicyName(channelId,vaultName):
+        return channelId+vaultName
 
-    def createPolicy(self, channelId, appName):
+    def createPolicy(self, channelId, vaultName):
         template = Templite("""
             path "sys" {
                 policy = "deny"
             }
 
-            path "secret/{{channelId}}/{{appName}}/*" {
+            path "secret/{{channelId}}/{{vaultName}}/*" {
                 policy = "write"
             }
 
-            path "secret/{{channelId}}/{{appName}}/*" {
+            path "secret/{{channelId}}/{{vaultName}}/*" {
                 policy = "read"
             }
         """)
-        t = template.render({"channelId":channelId, "appName":appName})
-        print(t)
-        self.client.set_policy(self.getPolicyName(channelId,appName), t)
+        t = template.render({"channelId":channelId, "vaultName":vaultName})
+        self.client.set_policy(self.getPolicyName(channelId,vaultName), t)
 
-    def deletePolicy(self,channelId,appName):
-        self.client.delete_policy(self.getPolicyName(channelId,appName))
+    def deletePolicy(self,channelId,vaultName):
+        self.client.delete_policy(self.getPolicyName(channelId,vaultName))
 
-    def getPolicy(self, channelId, appName, needParse):
-        return self.client.get_policy(self.getPolicyName(channelId,appName), parse=needParse)
+    def getPolicy(self, channelId, vaultName, needParse):
+        return self.client.get_policy(self.getPolicyName(channelId,vaultName), parse=needParse)
     
     def isSealed(self):
         return self.client.is_sealed()
@@ -77,8 +81,8 @@ class Vault(metaclass=Singleton):
     def unseal(self, token):
         self.client.unseal(token)
 
-    def generateToken(self,channelId,appName,lease="1h"):
-        return self.client.create_token(policies=[self.getPolicyName(channelId,appName)], lease=lease)
+    def generateToken(self,channelId,vaultName,lease="1h"):
+        return self.client.create_token(policies=[self.getPolicyName(channelId,vaultName)], lease=lease)
 
     def revokeToken(token):
         self.client.revoke_token(token)
