@@ -6,6 +6,9 @@ class Vault extends POJ {
     super('Vault', options)
     this.className = 'Vault'
   }
+  get objectId():string {
+    return this.objectId
+  }
 }
 
 class Secret extends POJ {

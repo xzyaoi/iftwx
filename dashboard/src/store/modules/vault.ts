@@ -8,11 +8,13 @@ import user from './user';
 import channel from './channel'
 export interface State {
     my_vaults: Array<Vault>;
+    attended_vaults: Array<Vault>;
 }
 
 
 const state: State = {
-  my_vaults: []
+  my_vaults: [],
+  attended_vaults:[]
 }
 
 const getters = {
@@ -84,9 +86,7 @@ const actions: ActionTree<State, object> = {
           query.find({
             success: function(results: Array<Vault>) {
               resolve(results)
-              commit(types.VAULTS, results.map(function(each){
-                return each.toJSON()
-              }))
+              commit(types.VAULTS, results)
             },
             error: function(err: Error) {
               reject(err)
@@ -107,8 +107,9 @@ const actions: ActionTree<State, object> = {
         let p_acquire = getVaultByChannel(attended_channels[index])
         acquire_channels_promise.push(p_acquire)
       }
-      Promise.all(acquire_channels_promise).then(vaules=>{
-        resolve(vaules)
+      Promise.all(acquire_channels_promise).then(values=>{
+        commit(types.ATTENDED_VAULTS,values)
+        resolve(values)
       })
     })
   },
@@ -124,10 +125,13 @@ const actions: ActionTree<State, object> = {
         success: function(res:Vault){
           let secret = new Secret()
           let createdBy = new ParseUser()
+          let vault = new Vault()
           secret.set('vault',Vault)
           createdBy.set('id',user.state.current_user.id)
+          vault.set('id',payload.vault_id)
           secret.set("createdBy" , createdBy)
           secret.set("name",payload.secret_name)
+          secret.set("vault",vault)
           secret.save(null, {
             success: function(_secret:Secret){
               resolve(_secret)
@@ -148,6 +152,9 @@ const actions: ActionTree<State, object> = {
 const mutations = {
   [types.VAULTS](_state: State, vaults: Array<Vault>) {
     _state.my_vaults = vaults
+  },
+  [types.ATTENDED_VAULTS](_state: State, vaults: Array<Vault>) {
+    _state.attended_vaults = vaults
   }
 }
 export default {

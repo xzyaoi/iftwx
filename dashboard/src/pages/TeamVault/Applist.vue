@@ -71,7 +71,7 @@
         <td class="text-xs-left">{{ props.item.objectId }}</td>
         <td class="text-xs-left">{{ props.item.name }}</td>
         <td class="text-xs-left">{{ props.item.createdAt }}</td>
-        <td class="text-xs-left"><v-btn flat color="primary" @click="viewDetail(props.item.objectId)">查看</v-btn></td>
+        <td class="text-xs-left"><v-btn flat color="primary" @click="viewVault(props.item.objectId)">查看</v-btn></td>
       </template>
       <template slot="pageText" slot-scope="{ pageStart, pageStop }">
         From {{ pageStart }} to {{ pageStop }}
@@ -141,8 +141,8 @@ export default Vue.extend({
         console.log(res)
       })
     },
-    viewDetail(objectId:string) {
-
+    viewVault(objectId:string) {
+      router.push({name:'TV-Secret', params:{vault_id:objectId}})
     },
     getChannels() {
       let self = this;
@@ -173,7 +173,6 @@ export default Vue.extend({
             })
           }).then(function(){
             self.listedVaults = self.myVaults.concat(self.attendedVaults)
-          console.log(self.listedVaults)
           })
       })
     }

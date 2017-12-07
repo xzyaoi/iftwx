@@ -98,13 +98,11 @@ const actions: ActionTree<State, object> = {
       user_query.equalTo('wxOpenId',user_ctx.toJSON().wxOpenId)
       user_query.first({
         success: function(res: ParseUser) {
-          console.log(res)
           let query = new Parse.Query(Channel)
           query.equalTo('follower', user_ctx.toJSON().wxOpenId)
           query.notEqualTo('createdBy',res)
           query.find({
             success: function(results: Array<Channel>) {
-              console.log(results)
               resolve(results)
               commit(types.ATTENDED_CHANNELS, results)
             },
