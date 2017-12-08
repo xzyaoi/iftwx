@@ -53,6 +53,10 @@ def createPolicy():
         v.createPolicy(channelId,vaultName)
     return 'success'
 
+# This Acquire Token API should only be called from Wechat or authorized user
+# The Generated Token will be expired after 1 hour by default
+# This method is the so called * dangerous operation *
+# Be careful when you are using this API
 @app.route('/acquireToken', methods=['POST'])
 def acquireToken():
     if request.method == 'POST':
@@ -60,7 +64,7 @@ def acquireToken():
         channelId = data['channelId']
         vaultName = data['vaultName']
         v.loginWithDefaultToken()
-        token = v.generateToken(channelId,vaultName)
+        token = v.generateToken(channelId, vaultName)
     return json.dumps(token)
 
 if __name__ == "__main__":

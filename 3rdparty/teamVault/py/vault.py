@@ -55,8 +55,8 @@ class Vault(metaclass=Singleton):
             return self.client.read(pname+'/'+secretName)
         except:
             result = {
-                'err':True,
-                'reason':'Denied'
+                'err': True,
+                'reason': 'Denied'
             }
 
     def getPolicyName(self, channelId, vaultName):
