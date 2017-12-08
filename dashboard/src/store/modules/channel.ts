@@ -17,7 +17,7 @@ interface State {
 const state: State = {
   current_channel: new Channel(),
   my_channels: [],
-  attended_channels:[]
+  attended_channels: []
 }
 
 const getters = {
@@ -68,7 +68,7 @@ const actions: ActionTree<State, object> = {
                 },
                 error: function(err: Error) {
                   console.warn(err)
-                   reject(err)
+                  reject(err)
                 }
               })
             }
@@ -92,15 +92,15 @@ const actions: ActionTree<State, object> = {
       })
     })
   },
-  getAttendedChannels({ commit }, user_ctx:ParseUser = user.state.current_user) {
+  getAttendedChannels({ commit }, user_ctx: ParseUser = user.state.current_user) {
     return new Promise((resolve, reject) => {
       let user_query = new Parse.Query(ParseUser)
-      user_query.equalTo('wxOpenId',user_ctx.toJSON().wxOpenId)
+      user_query.equalTo('wxOpenId', user_ctx.toJSON().wxOpenId)
       user_query.first({
         success: function(res: ParseUser) {
           let query = new Parse.Query(Channel)
           query.equalTo('follower', user_ctx.toJSON().wxOpenId)
-          query.notEqualTo('createdBy',res)
+          query.notEqualTo('createdBy', res)
           query.find({
             success: function(results: Array<Channel>) {
               resolve(results)

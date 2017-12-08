@@ -41,13 +41,13 @@ function createPolicy(channelId: String, vaultName: String): Promise<any> {
     Axios.post(create_policy_url, {
       channelId: channelId,
       vaultName: vaultName,
+    }).then(function(res) {
+      console.log(res)
+      resolve(res)
+    }).then(function(err) {
+      console.error(err)
+      reject(err)
     })
-  }).then(function(res) {
-    console.log(res)
-    resolve(res)
-  }).then(function(err) {
-    console.error(err)
-    reject(err)
   })
 }
 
