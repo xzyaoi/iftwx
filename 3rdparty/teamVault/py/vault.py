@@ -1,5 +1,5 @@
 #coding:utf-8
-from config import VAULT_URL, ROOT_TOKEN, UNSEAL_KEY
+import config
 import hvac
 from templite import Templite
 
@@ -12,13 +12,13 @@ class Singleton(type):
 
 class Vault(metaclass=Singleton):
     def __init__(self):
-        self.client = hvac.Client(url=VAULT_URL)
+        self.client = hvac.Client(url=config.VAULT_URL)
 
     def loginWithDefaultToken(self):
-        self.client = config.ROOT_TOKEN
+        self.client.token = config.ROOT_TOKEN
 
     def auth(self,token):
-        self.client = token
+        self.client.token = token
 
     def logOut(self):
         self.client.logOut()
@@ -35,7 +35,7 @@ class Vault(metaclass=Singleton):
     def writeSecret(self, channelId, vaultName, secretName, secret, lease=None):
         pname = self.getPolicyName(channelId, vaultName)
         if lease is None:
-            self.client.write(pname+secretName,value=secret)
+            self.client.write(pname+secretName,value=secret,lease='1h')
         else:
             self.client.write(pname+secretName,value=secret,lease=lease)
 
@@ -44,9 +44,9 @@ class Vault(metaclass=Singleton):
 
     def readSecret(self,channelId, vaultName, secretName):
         pname = self.getPolicyName(channelId, vaultName)
-        return self.client.read(pname)
+        return self.client.read(pname+secretName)
 
-    def getPolicyName(channelId,vaultName):
+    def getPolicyName(self, channelId, vaultName):
         return channelId+vaultName
 
     def createPolicy(self, channelId, vaultName):

@@ -6,7 +6,6 @@ import json
 from vault import v
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
 sio = socketio.Server()
 
 @sio.on('create_password', namespace='/secret')
@@ -22,6 +21,7 @@ def createPassword():
         channelId = data['channelId']
         passtitle = data['passtitle']
         token = data['token']
+        v.logOut()
         v.auth(token)
         v.writeSecret(channelId, vaultName,passtitle, password)
         v.revokeToken(token)
@@ -36,6 +36,7 @@ def readPassword():
         channelId = data['channelId']
         passtitle = data['passtitle']
         token = data['token']
+        v.logOut()
         v.auth(token)
         passcode = v.readSecret(channelId, vaultName, secretName)
         v.revokeToken(token)
@@ -44,7 +45,7 @@ def readPassword():
 @app.route('/createPolicy', methods=['POST'])
 def createPolicy():
     if request.method == 'POST':
-        data = json.loads(request.data)
+        data = json.loads(request.data.decode('utf-8'))
         channelId = data['channelId']
         vaultName = data['vaultName']
         v.loginWithDefaultToken()
@@ -61,4 +62,4 @@ def acquireToken():
     return token
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host='0.0.0.0', port=8800)
