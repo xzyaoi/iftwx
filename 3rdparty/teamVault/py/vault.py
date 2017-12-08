@@ -19,9 +19,10 @@ class Vault(metaclass=Singleton):
 
     def auth(self,token):
         self.client.token = token
+        print(self.isAuthenticated())
 
     def logOut(self):
-        self.client.logOut()
+        self.client.logout()
 
     def isInitialized(self):
         return self.client.is_initialized()
@@ -34,20 +35,32 @@ class Vault(metaclass=Singleton):
 
     def writeSecret(self, channelId, vaultName, secretName, secret, lease=None):
         pname = self.getPolicyName(channelId, vaultName)
-        if lease is None:
-            self.client.write(pname+secretName,value=secret,lease='1h')
-        else:
-            self.client.write(pname+secretName,value=secret,lease=lease)
+        try:
+            if lease is None:
+                self.client.write(pname+'/'+secretName,value=secret,lease='1h')
+            else:
+                self.client.write(pname+'/'+secretName,value=secret,lease=lease)
+            return 'success'
+        except:
+            return 'failed'
+
 
     def deleteSecret(self, name):
         self.client.delete(name)
 
     def readSecret(self,channelId, vaultName, secretName):
-        pname = self.getPolicyName(channelId, vaultName)
-        return self.client.read(pname+secretName)
+        try:
+            pname = self.getPolicyName(channelId, vaultName)
+            print(pname+'/'+secretName)
+            return self.client.read(pname+'/'+secretName)
+        except:
+            result = {
+                'err':True,
+                'reason':'Denied'
+            }
 
     def getPolicyName(self, channelId, vaultName):
-        return channelId+vaultName
+        return 'secret/'+channelId+'/'+vaultName
 
     def createPolicy(self, channelId, vaultName):
         template = Templite("""
@@ -84,7 +97,8 @@ class Vault(metaclass=Singleton):
     def generateToken(self,channelId,vaultName,lease="1h"):
         return self.client.create_token(policies=[self.getPolicyName(channelId,vaultName)], lease=lease)
 
-    def revokeToken(token):
+    def revokeToken(self,token):
+        self.client.token = config.ROOT_TOKEN
         self.client.revoke_token(token)
 
 v = Vault()

@@ -15,15 +15,16 @@ def createPassword(sid, data):
 @app.route('/createPass', methods=['POST'])
 def createPassword():
     if request.method == 'POST':
-        data = json.loads(request.data)
+        data = json.loads(request.data.decode('utf-8'))
         password = data['password']
         vaultName = data['vaultName']
         channelId = data['channelId']
         passtitle = data['passtitle']
         token = data['token']
         v.logOut()
+        print(token)
         v.auth(token)
-        v.writeSecret(channelId, vaultName,passtitle, password)
+        v.writeSecret(channelId,vaultName,passtitle,password)
         v.revokeToken(token)
     return 'success'
 
@@ -31,16 +32,16 @@ def createPassword():
 def readPassword():
     passcode = ''
     if request.method == 'POST':
-        data = json.loads(request.data)
+        data = json.loads(request.data.decode('utf-8'))
         vaultName = data['vaultName']
         channelId = data['channelId']
         passtitle = data['passtitle']
         token = data['token']
         v.logOut()
         v.auth(token)
-        passcode = v.readSecret(channelId, vaultName, secretName)
+        passcode = v.readSecret(channelId, vaultName, passtitle)
         v.revokeToken(token)
-    return passcode
+    return json.dumps(passcode)
 
 @app.route('/createPolicy', methods=['POST'])
 def createPolicy():
@@ -55,11 +56,12 @@ def createPolicy():
 @app.route('/acquireToken', methods=['POST'])
 def acquireToken():
     if request.method == 'POST':
-        data = json.loads(request.data)
+        data = json.loads(request.data.decode('utf-8'))
         channelId = data['channelId']
         vaultName = data['vaultName']
+        v.loginWithDefaultToken()
         token = v.generateToken(channelId,vaultName)
-    return token
+    return json.dumps(token)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8800)
+    app.run(host='0.0.0.0', port=5000)
