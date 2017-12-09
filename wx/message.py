@@ -128,6 +128,18 @@ def handle_template(appId,channelId,content,miniProgram=None,url=None):
     # Queue it
     return 'success'
 
+def handle_single_template(appId,wxId,content,miniProgram=None,url=None):
+    from queue import send_template_message
+    push_app = App.Query.get(objectId=appId)
+    templateId = push_app.templateId
+    channel = Channel.Query.get(objectId=channelId)
+    if not channel.app.objectId==appId:
+        return 'appid and channelId is not match'
+    # Query receiver openid
+    receiver = wxId
+    result = send_template_message.delay(each,templateId,content,url,miniProgram)
+    return 'success'
+
 def handle_plain_msg(appId,channelId,content):
     from queue import send_plain_message
     channel = Channel.Query.get(objectId = channelId)

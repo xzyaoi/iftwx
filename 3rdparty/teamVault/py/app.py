@@ -4,13 +4,19 @@ from flask_socketio import SocketIO, emit
 import time
 import json
 from vault import v
-
+from wxpush import pusher
 app = Flask(__name__)
 socketio = SocketIO(app)
 
 @socketio.on('requestToken')
 def createPassword(data):
     print(data)
+    reviewerId = data['reviewerWxId']
+    secretName = data['secret_name']
+    vaultId = data['l8d3GZhIE1']
+    channelId = data['channelId']
+    p = pusher.Pusher()
+
 
 @app.route('/createPass', methods=['POST'])
 def createPassword():

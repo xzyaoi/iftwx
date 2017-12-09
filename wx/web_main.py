@@ -46,12 +46,20 @@ def send():
         url = None
     return handle_template(appId, channelId, content, miniProgram,url)
 
-@app.route("/psend",methods=['POST'])
-def plain_send():
-    appId = ''
-    channelId = request.values.get('channelid')
+@app.route("/single_send",methods=['POST'])
+def single_send():
+    appId = request.values.get('appid')
+    wxid = request.values.get('wxid')
     content = request.values.get('content')
-    
+    try:
+        miniProgram = request.values.get('miniprogram')
+    except Exception:
+        miniProgram = None
+    try:
+        url = request.values.get('url')
+    except Exception:
+        url = None
+    return handle_single_template(appId, wxid, content, miniProgram,url)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5001)

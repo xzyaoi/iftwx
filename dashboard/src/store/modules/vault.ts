@@ -206,7 +206,6 @@ const actions: ActionTree<State, object> = {
         console.error(err)
       }
     })
-
   }
 }
 

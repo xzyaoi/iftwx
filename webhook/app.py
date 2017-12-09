@@ -194,5 +194,31 @@ def sdk_hook(channelId):
             }
         }
         content = json.dumps(info,ensure_ascii=False,indent=2)
-        r=requests.post("http://wechat.zhitantech.com/send",{"appid":"dLy5IeZT9H","channelid":channelId,"content":content,"url":"https://blog.zhitantech.com"})
+        r=requests.post("http://wechat.zhitantech.com/send",{"appid":"dLy5IeZT9H","channelid":channelId,"content":content,"url":data['url']})
+    return ''
+
+@app.route('/single/<string:wxid>', methods=['POST'])
+def sdk_hook(wxid):
+    if request.method == 'POST':
+        print ('Got request:', request.data)
+        data = json.loads(request.data)
+        info = {
+            "first":{
+                "value":data['title']
+            },
+            "keyword1":{
+                "value":data['sender']
+            },
+            "keyword2":{
+                "value":data['content']
+            },
+            "keyword3":{
+                "value":time.strftime("%Y-%m-%d %H:%M:%S")
+            },
+            "remark":{
+                "value":"请注意查看"
+            }
+        }
+        content = json.dumps(info,ensure_ascii=False,indent=2)
+        r=requests.post("http://wechat.zhitantech.com/single_send",{"appid":"dLy5IeZT9H","wxid":wxid,"content":content,"url":data['url']})
     return ''
