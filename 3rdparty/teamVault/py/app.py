@@ -1,16 +1,16 @@
 #coding:utf-8
 from flask import Flask, request
-import socketio
+from flask_socketio import SocketIO, emit
 import time
 import json
 from vault import v
 
 app = Flask(__name__)
-sio = socketio.Server()
+socketio = SocketIO(app)
 
-@sio.on('create_password', namespace='/secret')
-def createPassword(sid, data):
-    sio.emit('reply', room=sid)
+@socketio.on('requestToken')
+def createPassword(data):
+    print(data)
 
 @app.route('/createPass', methods=['POST'])
 def createPassword():
@@ -68,4 +68,4 @@ def acquireToken():
     return json.dumps(token)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    socketio.run(app)

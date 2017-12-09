@@ -3,20 +3,23 @@ import * as types from '../mutation-types'
 import { Parse } from '../../apis/index'
 import { ParseUser }  from '../../models/user'
 import { Channel }  from '../../models/channel'
-import { Vault, Secret, CreateVaultPayload, CreateSecretPayload } from '../../models/vault'
+import { Vault, Secret, CreateVaultPayload, CreateSecretPayload, RequestTokenPayload } from '../../models/vault'
 import user from './user';
 import channel from './channel'
 import { createPolicy } from '../../apis/vault.api'
+import { SocketService } from '../../apis/socket'
 
 export interface State {
     my_vaults: Array<Vault>;
     attended_vaults: Array<Vault>;
+    vaults_secrets: Array<Secret>;
 }
 
 
 const state: State = {
   my_vaults: [],
-  attended_vaults: []
+  attended_vaults: [],
+  vaults_secrets:[],
 }
 
 const getters = {
@@ -149,6 +152,61 @@ const actions: ActionTree<State, object> = {
         }
       })
     })
+  },
+
+  getSecretsbyVault({ commit }, vaultid:string) {
+    return new Promise((resolve, reject) => {
+      if (typeof user.state.current_user === 'undefined' || user.state.current_user === null) {
+        reject(new Error('user not logined'))
+      }
+      let secret_query = new Parse.Query(Secret)
+      let vault = new Vault()
+      vault.set('id', vaultid)
+      secret_query.equalTo('vault', vault)
+      secret_query.find({
+        success: function(res: Array<Secret>) {
+          resolve(res)
+          commit(types.SECRETS,res)
+        },
+        error: function(err: Error) {
+          reject(err)
+        }
+      })
+    })
+  },
+
+  applyForSecret({commit}, secretId:string) {
+    let socket = new SocketService()
+    let secret_query = new Parse.Query(Secret)
+    secret_query.include("vault")
+    secret_query.get(secretId,{
+      success:function(res:any) {
+        let pojo_res = res.toJSON()
+        console.log(pojo_res)
+        let vault_query = new Parse.Query(Vault)
+        vault_query.include('createdBy')
+        vault_query.get(pojo_res.vault.objectId,{
+          success: function(vault:any) {
+            let pojo_vault = vault.toJSON()
+            console.log(pojo_vault)
+            let payload:RequestTokenPayload = {
+              secret_name: pojo_res.name,
+              reviewerWxId: pojo_vault.createdBy.wxOpenId,
+              channelId: pojo_vault.channel.objectId,
+              vaultId: pojo_vault.objectId
+            }
+            socket.send("requestToken",{data:payload})
+          },
+          error:function(err: Error) {
+            console.error(err)
+          }
+        })
+      },
+      error:function(err: Error) {
+        console.error(err)
+      }
+    })
+
   }
 }
 
@@ -158,6 +216,9 @@ const mutations = {
   },
   [types.ATTENDED_VAULTS](_state: State, vaults: Array<Vault>) {
     _state.attended_vaults = vaults
+  },
+  [types.SECRETS](_state: State, secrets: Array<Secret>) {
+    _state.vaults_secrets = secrets
   }
 }
 export default {

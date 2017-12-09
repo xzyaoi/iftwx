@@ -1,6 +1,25 @@
 <template>
 <div class="container">
   <v-layout row justify-center>
+    <v-dialog v-model="is_request_dialog_open" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">申请密码中</span>
+        </v-card-title>
+        <v-card-text>
+          <v-layout row fluid justify-center>
+            <v-progress-circular indeterminate v-bind:size="70" v-bind:width="3" color="primary"></v-progress-circular>
+            <p>{{ check_password_status }}</p>
+          </v-layout>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" flat @click.native="is_request_dialog_open = false">放弃</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-layout>
+  <v-layout row justify-center>
     <v-dialog v-model="is_create_dialog_open" max-width="500px">
       <v-card>
         <v-card-title>
@@ -51,17 +70,18 @@
         hide-details
         v-model="search"
       ></v-text-field>
-        <v-btn color="blue darken-1" flat="flat" @click="createVault">创建密码</v-btn>
+        <v-btn color="blue darken-1" flat="flat" @click="createSecret()">创建密码</v-btn>
     </v-card-title>
     <v-data-table
         v-bind:headers="headers"
-        v-bind:items="listedVault"
+        v-bind:items="listedSecrets"
         v-bind:search="search"
       >
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.objectId }}</td>
         <td class="text-xs-left">{{ props.item.name }}</td>
         <td class="text-xs-left">{{ props.item.createdAt }}</td>
+        <td class="text-xs-left"><v-btn flat color="primary" @click="viewPassword(props.item.objectId)">查看</v-btn></td>
       </template>
       <template slot="pageText" slot-scope="{ pageStart, pageStop }">
         从第 {{ pageStart }} 个到第 {{ pageStop }} 个
@@ -77,14 +97,16 @@ import store from "../../store"
 import vaultStore from '../../store/modules/vault'
 import router from "../../router"
 import { Channel } from "../../models/channel"
-import { Vault, CreateVaultPayload,CreateSecretPayload } from "../../models/vault"
+import { Vault, Secret, CreateVaultPayload, CreateSecretPayload } from "../../models/vault"
 export default Vue.extend({
   data: () => ({
-    listedVault: [],
+    listedSecrets: [],
     select_items: [],
     select_items_name:[],
+    check_password_status: "申请中",
     selected_channel: "",
     is_create_dialog_open : false,
+    is_request_dialog_open : false,
     secret_title:'',
     secret_value:'',
     vault_name:'',
@@ -95,23 +117,27 @@ export default Vue.extend({
     pagination: {},
     headers: [
       {
-        text: "保险柜ID",
+        text: "密码ID",
         align: "left",
         sortable: false,
         value: "objectId"
       },
-      { text: "保险柜名", value: "name", align: "left" },
+      { text: "密码标题", value: "name", align: "left" },
       { text: "创建时间", value: "createdAt", align: "left" },
     ]
   }),
   methods: {
-    createVault() {
+    createSecret() {
       this.is_create_dialog_open = true
+    },
+    viewPassword(objectId: string) {
+      this.is_request_dialog_open = true
+      store.dispatch('applyForSecret',objectId)
     },
     submitSecrets() {
       this.is_create_dialog_open = false
       let payload: CreateSecretPayload = {
-        vault_id:this.$route.params.vault_id,
+        vault_id: this.$route.params.vault_id,
         secret_name: this.secret_title
       }
       store.dispatch("createSecret",payload).then(function(res) {
@@ -120,6 +146,11 @@ export default Vue.extend({
     },
     getSecrets() {
       let self = this
+      store.dispatch("getSecretsbyVault",this.$route.params.vault_id).then(function(res){
+        self.listedSecrets = res.map(function(each: Secret) {
+          return each.toJSON()
+        })
+      })
     },
     getVaultName() {
       for(let index in vaultStore.state.my_vaults){

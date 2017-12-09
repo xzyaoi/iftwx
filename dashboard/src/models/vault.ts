@@ -28,12 +28,19 @@ interface CreateVaultPayload {
 interface CreateSecretPayload {
   secret_name: string;
   vault_id: string;
+}
 
+interface RequestTokenPayload {
+  secret_name: string;
+  reviewerWxId: string;
+  channelId: string;
+  vaultId: string;
 }
 
 export {
   Vault,
   Secret,
   CreateVaultPayload,
-  CreateSecretPayload
+  CreateSecretPayload,
+  RequestTokenPayload
 }

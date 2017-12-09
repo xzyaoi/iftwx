@@ -1,16 +1,17 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Login from '@/pages/Login.vue';
-import Container from '@/pages/Container.vue';
-import MessageApp from '@/pages/MessageApp.vue';
-import MyChannelPage from '@/pages/Channels/MyChannel.vue';
-import CreateChannel from '@/pages/Channels/CreateChannel.vue';
-import Applist from '@/pages/TeamVault/Applist.vue';
-import Audit from '@/pages/TeamVault/Audit.vue';
-import Secretlist from '@/pages/TeamVault/Secretlist.vue';
-import VaultDefault from '@/pages/TeamVault/Layout.vue';
+import Vue from 'vue'
+import Router from 'vue-router'
+import Login from '@/pages/Login.vue'
+import Container from '@/pages/Container.vue'
+import MessageApp from '@/pages/MessageApp.vue'
+import MyChannelPage from '@/pages/Channels/MyChannel.vue'
+import CreateChannel from '@/pages/Channels/CreateChannel.vue'
+import Vaultlist from '@/pages/TeamVault/Vaultlist.vue'
+import Audit from '@/pages/TeamVault/Audit.vue'
+import Secretlist from '@/pages/TeamVault/Secretlist.vue'
+import VaultDefault from '@/pages/TeamVault/Layout.vue'
 import user from '../store/modules/user'
-Vue.use(Router);
+
+Vue.use(Router)
 
 const router = new Router({
   routes: [
@@ -61,7 +62,7 @@ const router = new Router({
             {
               path: 'applist',
               name: 'TV-Applist',
-              component: Applist,
+              component: Vaultlist,
               meta: {
                 requireAuth: true
               }
@@ -85,7 +86,7 @@ const router = new Router({
             {
               path: 'default',
               name: 'TV-Default',
-              component: Applist,
+              component: Vaultlist,
               meta: {
                 requireAuth: true
               }
@@ -95,7 +96,7 @@ const router = new Router({
       ]
     }
   ]
-});
+})
 
 router.beforeEach((to, from, next) => {
   // Check if user has logined there
@@ -110,6 +111,6 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
-});
+})
 
-export default router;
+export default router
