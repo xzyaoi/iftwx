@@ -15,8 +15,14 @@ def createPassword(data):
     secretName = data['secret_name']
     vaultId = data['l8d3GZhIE1']
     channelId = data['channelId']
+    applyFrom = data['applyFrom']
     p = pusher.Pusher()
+    # Query user info first
 
+    # Make Brief Intro and URL
+
+    # Send Notification
+    p.single_send(reviewerId,)
 
 @app.route('/createPass', methods=['POST'])
 def createPassword():

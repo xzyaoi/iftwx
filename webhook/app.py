@@ -198,7 +198,7 @@ def sdk_hook(channelId):
     return ''
 
 @app.route('/single/<string:wxid>', methods=['POST'])
-def sdk_hook(wxid):
+def sdk_single_hook(wxid):
     if request.method == 'POST':
         print ('Got request:', request.data)
         data = json.loads(request.data)

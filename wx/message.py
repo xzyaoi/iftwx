@@ -137,7 +137,7 @@ def handle_single_template(appId,wxId,content,miniProgram=None,url=None):
         return 'appid and channelId is not match'
     # Query receiver openid
     receiver = wxId
-    result = send_template_message.delay(each,templateId,content,url,miniProgram)
+    result = send_template_message.delay(receiver,templateId,content,url,miniProgram)
     return 'success'
 
 def handle_plain_msg(appId,channelId,content):

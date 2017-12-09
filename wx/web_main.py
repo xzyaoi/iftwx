@@ -7,6 +7,7 @@ from config import WX_SETTINGS
 from config import PARSE_SETTINGS
 from message import handle_message
 from message import handle_template
+from message import handle_single_template
 import os
 
 register(PARSE_SETTINGS['APP_ID'], PARSE_SETTINGS['MASTER_KEY'])

@@ -4,7 +4,7 @@ import { Parse } from '../../apis/index'
 import { ParseUser }  from '../../models/user'
 import { Channel }  from '../../models/channel'
 import { Vault, Secret, CreateVaultPayload, CreateSecretPayload, RequestTokenPayload } from '../../models/vault'
-import user from './user';
+import user from './user'
 import channel from './channel'
 import { createPolicy } from '../../apis/vault.api'
 import { SocketService } from '../../apis/socket'
@@ -48,11 +48,9 @@ const actions: ActionTree<State, object> = {
       let user_query = new Parse.Query(ParseUser)
       user_query.get(user.state.current_user.id, {
         success: function(res: ParseUser) {
-          console.log(res)
           let channel_query = new Parse.Query(Channel)
           channel_query.get(payload.channel_id, {
             success: function(_channel: Channel) {
-              console.log(_channel)
               let vault = new Vault()
               vault.set('channel', _channel)
               vault.set('createdBy', res)
@@ -193,7 +191,8 @@ const actions: ActionTree<State, object> = {
               secret_name: pojo_res.name,
               reviewerWxId: pojo_vault.createdBy.wxOpenId,
               channelId: pojo_vault.channel.objectId,
-              vaultId: pojo_vault.objectId
+              vaultId: pojo_vault.objectId,
+              applyFrom: user.state.current_user.id,
             }
             socket.send("requestToken",{data:payload})
           },

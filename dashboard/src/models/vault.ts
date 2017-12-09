@@ -35,6 +35,7 @@ interface RequestTokenPayload {
   reviewerWxId: string;
   channelId: string;
   vaultId: string;
+  applyFrom: string;
 }
 
 export {
