@@ -1,3 +1,4 @@
+#coding:utf-8
 from celery import Celery
 from wechat import client
 from wechatpy.replies import TextReply
@@ -14,8 +15,7 @@ CELERY_CONFIG = {
     'CELERY_TASK_SERIALIZER': 'json',
     'CELERY_RESULT_SERIALIZER': 'json',
     'CELERY_ACCEPT_CONTENT': ['json'],
-    'CELERYD_MAX_TASKS_PER_CHILD': 1,
-    'CELERYBEAT_SCHEDULE': CELERYBEAT_SCHEDULE     # 启动beat，传入相关参数.
+    'CELERYD_MAX_TASKS_PER_CHILD': 1
 }
 
 @celery_app.task

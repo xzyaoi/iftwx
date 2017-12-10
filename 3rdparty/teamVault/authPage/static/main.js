@@ -3,6 +3,12 @@
  * Global Variables
  */
 var socket = null
+var sessId = null
+var userId = null
+
+Parse.initialize("zhulijun-app-id")
+Parse.serverURL = 'https://cloud.yice.org.cn/zhulijun'
+
 
 /**
  * @param {string} endpoint
@@ -26,46 +32,31 @@ function getUrlParam(name) {
 /**
  * 
  */
-function getUserInfo() {
-    var userid = getUrlParam('userid')
-    $.ajax({
-        type: 'GET',
-        url: getRequestUrl('_User') + '/' + getUrlParam('userid'),
-        headers: {
-            'X-Parse-Application-Id': 'zhulijun-app-id'
+function getUserInfo(userid) {
+    var User = Parse.Object.extend("_User")
+    var query = new Parse.Query(User)
+    query.get(userid, {
+        success: function(result) {
+            var pojo_result = result.toJSON()
+            document.getElementById('user_avatar').setAttribute("src", pojo_result.headimgurl)
+            document.getElementById('apply_info').innerHTML = document.getElementById('apply_info').innerHTML.replace('{username}', pojo_result.nickName)
+            document.getElementById('apply_by').innerHTML = document.getElementById('apply_by').innerHTML.replace('{username}', pojo_result.nickName)
         },
-        dataType: 'json',
-        success: function(data) {
-            console.log(data)
-            document.getElementById('user_avatar').setAttribute("src", data.headimgurl)
-            document.getElementById('apply_info').innerHTML = document.getElementById('apply_info').innerHTML.replace('{username}', data.nickName)
-            document.getElementById('apply_by').innerHTML = document.getElementById('apply_by').innerHTML.replace('{username}', data.nickName)
-        },
-        error: function(xhr, type) {
-            console.log(xhr)
-            console.log(type)
+        error: function(error) {
+            alert("网络错误")
         }
     })
 }
 
 /**
- * 
- */
-function getBrief() {
-    socket.on('brief', function(data) {
-        console.log(data)
-    })
-}
-/**
  * Prepare Connection
  * Load URL Params
  */
 function beforeConnect() {
-    var userid = getUrlParam('userid')
-    var channelId = getUrlParam('channelId')
-    var vaultId = getUrlParam('vaultId')
-    var secretName = getUrlParam('secretName')
+    userid = getUrlParam('userid')
+    sessId = getUrlParam('sessId')
 }
+
 
 /**
  * 
@@ -104,4 +95,56 @@ function getOpenId() {
 
 function initWechat() {
 
+}
+
+function getRequestDetail(sessId) {
+    var Request = Parse.Object.extend("Request")
+    var query = new Parse.Query(Request)
+    query.equalTo('sessId', sessId)
+    query.include('channel')
+    query.include('appliance')
+    query.include('vault')
+    query.first({
+        success: function(result) {
+            var pojo_result = result.toJSON()
+            console.log(pojo_result)
+            document.getElementById('apply_info').innerHTML = document.getElementById('apply_info').innerHTML.replace('{secretName}', pojo_result.secretName)
+            document.getElementById('acc_info').innerHTML = document.getElementById('acc_info').innerHTML.replace('{channelName}', pojo_result.channel.name)
+            document.getElementById('acc_info').innerHTML = document.getElementById('acc_info').innerHTML.replace('{vaultName}', pojo_result.vault.name)
+        },
+        error: function(error) {
+            alert("网络错误")
+        }
+    })
+}
+
+function validationUser(urlUserId, applianceId) {
+    if (urlUserId === applianceId) {
+        return true
+    } else {
+        return false
+    }
+}
+
+function bootstrap() {
+    /**
+     * Init Wechat
+     */
+    initWechat()
+        /**
+         * Init Socket
+         */
+        //initSocket()
+        /**
+         * Parsing Parameters
+         */
+    beforeConnect()
+        /**
+         * Retriving User info
+         */
+    getUserInfo(userid)
+        /**
+         * Retriving Request info
+         */
+    getRequestDetail(sessId)
 }

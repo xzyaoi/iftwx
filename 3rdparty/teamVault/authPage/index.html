@@ -12,8 +12,10 @@
     <link rel="stylesheet" href="./static/main.css">
     <script src="https://cdn.staticfile.org/socket.io/1.7.3/socket.io.min.js"></script>
     <script src="https://cdn.staticfile.org/zepto/1.0rc1/zepto.min.js"></script>
-    <script src="./static/main.js"></script>
     <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="https://cdn.staticfile.org/parse/1.9.2/parse.min.js"></script>
+    <script src="./static/main.js"></script>
+
     <style>
         body {
             background-color: #efeff4;
@@ -38,7 +40,7 @@
                 </div>
                 <div class="weui-msg__text-area">
                     <h2 class="weui-msg__title">密钥读取请求</h2>
-                    <p class="weui-msg__desc" id="apply_info">{username} 正在申请 {AppName}/{PassType} 的密钥</p>
+                    <p class="weui-msg__desc" id="apply_info">{username} 正在申请 {secretName}</p>
                 </div>
                 <div class="weui-cells">
                     <div class="weui-cell cell-item-left">
@@ -53,7 +55,7 @@
                     </div>
                     <div class="weui-cell cell-item-left">
                         <div class="weui-cell__bd">
-                            <p>授权账号：{AppName}/{PassType}</p>
+                            <p id="acc_info">授权账号：{channelName}/{vaultName}</p>
                         </div>
                     </div>
                 </div>
@@ -74,9 +76,7 @@
 </body>
 <footer>
     <script>
-        initWechat()
-        getUserInfo()
-        initSocket()
+        bootstrap()
     </script>
 </footer>
 

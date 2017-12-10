@@ -11,7 +11,7 @@ install_requires = [
 
 setup(
     name='wxpusher',
-    version='0.0.1',
+    version='0.0.3',
     description='Wechat Pusher Python SDK',
     url='https://github.com/zhitantech/wxpush-sdk-py',
     author='Zhitan Technology',

@@ -9,7 +9,7 @@ class Pusher():
         headers = {'content-type': 'application/json'}
         r = requests.post("https://zt-webhook.herokuapp.com/sdk/"+self.channelId, data=json.dumps(payload))
         return r
-    def single_send(self, wxid, content, url):
+    def single_send(self, wxid, title, content, url):
         payload = {'title': title, 'sender': self.sender,'content':content,'url':url}
         headers = {'content-type': 'application/json'}
         r = requests.post("https://zt-webhook.herokuapp.com/single/"+wxid, data=json.dumps(payload))

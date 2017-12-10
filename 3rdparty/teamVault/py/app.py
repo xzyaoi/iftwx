@@ -5,7 +5,7 @@ import requests
 import time
 import json
 from vault import v
-# from wxpush import pusher
+from wxpush import pusher
 import config
 from urllib import parse
 from templite import Templite
@@ -16,14 +16,12 @@ socketio = SocketIO(app)
 @socketio.on('requestToken')
 def requestToken(data):
     data = data['data']
-    print(data)
-    print(request.sid)
     reviewerId = data['reviewerWxId']
     secretName = data['secret_name']
     vaultId = data['vaultId']
     channelId = data['channelId']
     applyFrom = data['applyFrom']
-    # p = pusher.Pusher()
+    p = pusher.Pusher(channelId,'Team Vault')
     # Query user, channel, vault info first
     # user
     user_query_payload = parse.quote('"objectId"')+":"+parse.quote('"'+applyFrom+'"')
@@ -42,7 +40,7 @@ def requestToken(data):
         您好，{{username}} 正在申请 {{channelName}}/{{vaultName}} 的 {{secretName}}。 请查看。
     """)
     brief = brief_template.render({'username':user_data['results'][0]['nickName'], 'channelName':channel_data['results'][0]['name'], 'vaultName':vault_data['results'][0]['name'], 'secretName':secretName})
-    print(brief)
+    
     # Send Socket ID and etc into Database for further Audit
     sessPayload = {
         "appliance":
@@ -52,19 +50,18 @@ def requestToken(data):
         "sessId":request.sid,
         "vault":
             {"__type":"Pointer","className":"Vault","objectId":vault_data['results'][0]['objectId']},
+        "reviewerId":reviewerId,
+        "isAllowed":False,
         "secretName":secretName,
         "brief":brief
     }
-    print(sessPayload)
     sessPayload = json.dumps(sessPayload).replace("'",'"')
-    print(sessPayload)
     res = requests.post(config.sess_request_url,headers = config.request_headers,data = sessPayload)
-    print(res.status_code)
-    print(res.text)
     # Build URL
-
+    notification_url = 'https://tenant.zhitantech.com/dev/vault/index.html?userid='+applyFrom+'&sessId='+request.sid
     # Send Notification
-    # p.single_send(reviewerId,brief)
+    r = p.single_send(reviewerId,'密码访问请求', brief, notification_url)
+    print (r)
 
 @app.route('/createPass', methods=['POST'])
 def createPassword():
