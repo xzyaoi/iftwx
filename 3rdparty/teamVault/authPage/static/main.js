@@ -51,9 +51,28 @@ function getUserInfo() {
 /**
  * 
  */
+function getBrief() {
+    socket.on('brief', function(data) {
+        console.log(data)
+    })
+}
+/**
+ * Prepare Connection
+ * Load URL Params
+ */
+function beforeConnect() {
+    var userid = getUrlParam('userid')
+    var channelId = getUrlParam('channelId')
+    var vaultId = getUrlParam('vaultId')
+    var secretName = getUrlParam('secretName')
+}
+
+/**
+ * 
+ */
 function initSocket() {
     if (socket === null) {
-        socket = io.connect('http://localhost:8080')
+        socket = io.connect('http://localhost:5000')
         socket.on('connect', function(data) {
             console.log(data)
             socket.emit('message', { my: 'data' })
