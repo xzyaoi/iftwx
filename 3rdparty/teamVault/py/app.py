@@ -45,17 +45,22 @@ def requestToken(data):
     print(brief)
     # Send Socket ID and etc into Database for further Audit
     sessPayload = {
-        'appliance':
+        "appliance":
             {"__type":"Pointer","className":"_User","objectId":user_data['results'][0]['objectId']},
-        'channel':
+        "channel":
             {"__type":"Pointer","className":"Channel","objectId":channel_data['results'][0]['objectId']},
-        'sessId':request.sid,
-        'vault':
+        "sessId":request.sid,
+        "vault":
             {"__type":"Pointer","className":"Vault","objectId":vault_data['results'][0]['objectId']},
-        'secretName':secretName,
-        'brief':brief
+        "secretName":secretName,
+        "brief":brief
     }
-    res = requests.post(config.sess_request_url,headers = config.request_headers,data=sessPayload)
+    print(sessPayload)
+    sessPayload = json.dumps(sessPayload).replace("'",'"')
+    print(sessPayload)
+    res = requests.post(config.sess_request_url,headers = config.request_headers,data = sessPayload)
+    print(res.status_code)
+    print(res.text)
     # Build URL
 
     # Send Notification

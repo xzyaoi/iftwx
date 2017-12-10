@@ -9,5 +9,6 @@ channel_request_url = base_url +'Channel'
 vault_request_url = base_url +'Vault'
 sess_request_url = base_url +'Request'
 request_headers = {
-    'X-Parse-Application-Id' : 'zhulijun-app-id'
+    'X-Parse-Application-Id' : 'zhulijun-app-id',
+    "Content-Type": "application/json"
 }

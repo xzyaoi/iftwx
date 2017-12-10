@@ -169,7 +169,7 @@ export default Vue.extend({
         }).then(function() {
           store.dispatch("getAttendedVaults").then(function(res) {
             self.attendedVaults = res.map(function(each: Vault) {
-              return Object.assign(each.toJSON(),{created:false})
+              return Object.assign(each,{created:false})
             })
           }).then(function(){
             self.listedVaults = self.myVaults.concat(self.attendedVaults)
