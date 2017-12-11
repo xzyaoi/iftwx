@@ -1,6 +1,7 @@
 #coding:utf-8
 from flask import Flask, request
 from flask_socketio import SocketIO, emit
+from flask_cors import CORS
 import requests
 import time
 import json
@@ -12,6 +13,8 @@ from templite import Templite
 
 app = Flask(__name__)
 socketio = SocketIO(app)
+CORS(app)
+
 
 @socketio.on('requestToken')
 def requestToken(data):
@@ -117,6 +120,32 @@ def acquireToken():
         v.loginWithDefaultToken()
         token = v.generateToken(channelId, vaultName)
     return json.dumps(token)
+
+@app.route('/allowRequest', methods=['POST'])
+def allowRequest():
+    if request.method == 'POST':
+        print(request.data)
+        data = json.loads(request.data.decode('utf-8'))
+        sessId = data['sessId']
+        # User ID for Authentication
+        userId = data['userId']
+        # Fetch Session
+        sess_query_payload = parse.quote('"sessId"')+":"+parse.quote('"'+sessId+'"')
+        sess_query_response = requests.get(config.sess_request_url+'?where={'+sess_query_payload+"}", headers = config.request_headers)
+        sess_data = json.loads(sess_query_response.text)
+        # Change isAllowed to True
+        sess_modify_data = {
+            "isAllowed" : True
+        }
+        sess_modify_data = json.dumps(sess_modify_data).replace("'",'"')
+        res = requests.put(config.sess_request_url+'/'+sess_data['results'][0]['objectId'],headers = config.request_headers,data = sess_modify_data)
+        # Fetch Token from Vault
+        # Send socket info to client
+        return 'success'
+
+@app.route('/denyRequest', methods=['POST'])
+def denyRequest():
+    pass
 
 if __name__ == "__main__":
     socketio.run(app)

@@ -1,4 +1,9 @@
 /**
+ * This file indicates functions used inside auth page
+ * @author Xiaozhe Yao
+ */
+
+/**
  * 
  * Global Variables
  */
@@ -9,6 +14,13 @@ var userId = null
 Parse.initialize("zhulijun-app-id")
 Parse.serverURL = 'https://cloud.yice.org.cn/zhulijun'
 
+/**
+ * Vault Based Backend Endpoints
+ * It's Globally
+ */
+
+var base_url = 'http://127.0.0.1:5000/'
+var auth_key_url = base_url + 'allowRequest'
 
 /**
  * @param {string} endpoint
@@ -32,10 +44,10 @@ function getUrlParam(name) {
 /**
  * 
  */
-function getUserInfo(userid) {
+function getUserInfo(userId) {
     var User = Parse.Object.extend("_User")
     var query = new Parse.Query(User)
-    query.get(userid, {
+    query.get(userId, {
         success: function(result) {
             var pojo_result = result.toJSON()
             document.getElementById('user_avatar').setAttribute("src", pojo_result.headimgurl)
@@ -53,7 +65,7 @@ function getUserInfo(userid) {
  * Load URL Params
  */
 function beforeConnect() {
-    userid = getUrlParam('userid')
+    userId = getUrlParam('userId')
     sessId = getUrlParam('sessId')
 }
 
@@ -74,11 +86,17 @@ function initSocket() {
 }
 
 function authPasskey() {
-    if (socket === null) {
-        console.error('socket has not been initialized.')
-        return;
-    }
-    socket.emit('auth_success', { data: '123' })
+    $.ajax({
+        type: "POST",
+        url: auth_key_url,
+        contentType: 'application/json',
+        data: JSON.stringify({'sessId': sessId, 'userId': userId}),
+        dataType: 'json',
+        timeout: 300,
+        success:function(data) {
+            console.log(data)
+        }
+    })
 }
 
 function denyPasskey() {
@@ -142,7 +160,7 @@ function bootstrap() {
         /**
          * Retriving User info
          */
-    getUserInfo(userid)
+    getUserInfo(userId)
         /**
          * Retriving Request info
          */

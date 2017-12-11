@@ -1,5 +1,5 @@
-Werkzeug>=0.11.11,<1.0.0
-Flask>=0.10.1,<1.0.0
+Werkzeug
+Flask
 gunicorn
 requests
 hvac
@@ -7,3 +7,4 @@ gevent
 flask-socketio
 gevent-websocket
 eventlet
+flask-cors

@@ -1,3 +1,7 @@
 /.vscode
 /.leancloud
 /__pycache__
+/bin
+/include
+/lib
+/lib64

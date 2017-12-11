@@ -1,7 +1,7 @@
 #coding:utf-8
 VAULT_URL = 'http://localhost:8200'
-ROOT_TOKEN = '2000a0eb-ca67-2674-e0d7-896e22db90d4'
-UNSEAL_KEY = 'NUpucqQkgmWnjC+Zd5zzU26COwejLwQPSLac8Y3IPmI='
+ROOT_TOKEN = '61691c85-a037-212f-d4de-8c81f087648c'
+UNSEAL_KEY = 'cHYte9Rahxl7B0lF8rEMM4IKlNgWgXK9t2BU2/dIN/o='
 
 base_url = 'https://cloud.yice.org.cn/zhulijun/classes/'
 user_request_url = base_url +'_User'

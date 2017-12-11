@@ -44,7 +44,6 @@ class Vault(metaclass=Singleton):
         except:
             return 'failed'
 
-
     def deleteSecret(self, name):
         self.client.delete(name)
 
