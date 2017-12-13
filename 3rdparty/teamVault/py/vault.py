@@ -57,6 +57,8 @@ class Vault(metaclass=Singleton):
                 'err': True,
                 'reason': 'Denied'
             }
+            print(result)
+            return result
 
     def getPolicyName(self, channelId, vaultId):
         return 'secret/'+channelId+'/'+vaultId

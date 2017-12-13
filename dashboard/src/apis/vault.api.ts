@@ -1,14 +1,14 @@
 import { Axios } from './axios'
 import { create_pass_url, read_pass_url, create_policy_url } from './endpoints'
 
-function createPass(passTitle: String, channelId: String, vaultName: String, password: String, token: String): Promise<any> {
+function createPass(passTitle: String, channelId: String, vaultId: String, password: String): Promise<any> {
   return new Promise((resolve, reject) => {
+    console.log('creating pass')
     Axios.post(create_pass_url, {
       channelId: channelId,
-      vaultName: vaultName,
+      vaultId: vaultId,
       password: password,
       passtitle: passTitle,
-      token: token
     }).then(function(res) {
       console.log(res)
       resolve(res)
@@ -19,11 +19,11 @@ function createPass(passTitle: String, channelId: String, vaultName: String, pas
   })
 }
 
-function readPass(passTitle: String, token: String, vaultName: String, channelId: String): Promise<any> {
+function readPass(passTitle: String, token: String, vaultId: String, channelId: String): Promise<any> {
   return new Promise((resolve, reject) => {
     Axios.post(read_pass_url, {
       channelId: channelId,
-      vaultName: vaultName,
+      vaultId: vaultId,
       passtitle: passTitle,
       token: token
     }).then(function(res) {
@@ -36,11 +36,11 @@ function readPass(passTitle: String, token: String, vaultName: String, channelId
   })
 }
 
-function createPolicy(channelId: String, vaultName: String): Promise<any> {
+function createPolicy(channelId: String, vaultId: String): Promise<any> {
   return new Promise((resolve, reject) => {
     Axios.post(create_policy_url, {
       channelId: channelId,
-      vaultName: vaultName,
+      vaultId: vaultId,
     }).then(function(res) {
       console.log(res)
       resolve(res)

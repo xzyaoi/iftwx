@@ -3,16 +3,34 @@
   <v-layout row justify-center>
     <v-dialog v-model="is_request_dialog_open" max-width="500px">
       <v-card>
-        <v-card-title>
-          <span class="headline">申请密码中</span>
-        </v-card-title>
-        <v-card-text>
-          <v-layout row fluid justify-center>
-            <v-progress-circular indeterminate v-bind:size="70" v-bind:width="3" color="primary"></v-progress-circular>
-            <p>{{ check_password_status }}</p>
+        <v-list>
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <v-progress-circular indeterminate v-bind:size="70" v-bind:width="3" color="primary"></v-progress-circular>
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>密码请求状态</v-list-tile-title>
+              <v-list-tile-sub-title>{{check_password_status}}</v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+        <v-divider></v-divider>
+        <v-list v-if=" request_serial!=='' ">
+          <v-list-tile>
             <p v-if=" request_serial!=='' ">请求序号：{{ request_serial }}</p>
-          </v-layout>
-        </v-card-text>
+          </v-list-tile>
+          <v-list-tile>
+            <p v-if=" request_token!=='' ">请求令牌：{{ request_token }}</p>
+          </v-list-tile>
+          <v-list-tile>
+            <p v-if=" read_password!=='' ">返回密码：<B>{{ read_password }}</B></p>
+          </v-list-tile>
+        </v-list>
+        <v-list v-if=" request_serial=='' ">
+          <v-list-tile>
+          等待管理员通过
+          </v-list-tile>
+        </v-list>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click.native="is_request_dialog_open = false">放弃</v-btn>
@@ -82,7 +100,7 @@
         <td class="text-xs-left">{{ props.item.objectId }}</td>
         <td class="text-xs-left">{{ props.item.name }}</td>
         <td class="text-xs-left">{{ props.item.createdAt }}</td>
-        <td class="text-xs-left"><v-btn flat color="primary" @click="viewPassword(props.item.objectId)">查看</v-btn></td>
+        <td class="text-xs-left"><v-btn flat color="primary" @click="viewPassword(props.item.objectId, props.item.name)">查看</v-btn></td>
       </template>
       <template slot="pageText" slot-scope="{ pageStart, pageStop }">
         从第 {{ pageStart }} 个到第 {{ pageStop }} 个
@@ -98,14 +116,15 @@ import store from "../../store"
 import vaultStore from '../../store/modules/vault'
 import router from "../../router"
 import { Channel } from "../../models/channel"
-import { Vault, Secret, CreateVaultPayload, CreateSecretPayload } from "../../models/vault"
+import { Vault, Secret, CreateVaultPayload, CreateSecretPayload, ReadPasswordPayload } from "../../models/vault"
 export default Vue.extend({
   data: () => ({
     listedSecrets: [],
     select_items: [],
     select_items_name:[],
-    check_password_status: "申请中",
+    check_password_status: "启动连接",
     request_serial:'',
+    request_token:'',
     selected_channel: "",
     is_create_dialog_open : false,
     is_request_dialog_open : false,
@@ -117,6 +136,9 @@ export default Vue.extend({
     search: "",
     tmp: "",
     pagination: {},
+    view_password_title:'',
+    view_channel_id:'',
+    read_password:'',
     headers: [
       {
         text: "密码ID",
@@ -132,16 +154,19 @@ export default Vue.extend({
     createSecret() {
       this.is_create_dialog_open = true
     },
-    viewPassword(objectId: string) {
+    viewPassword(objectId: string, passTitle:string) {
       this.is_request_dialog_open = true
+      this.view_password_title = passTitle
       this.initSocketWatcher()
+      this.check_password_status = '等待管理员确认'
       store.dispatch('applyForSecret',objectId)
     },
     submitSecrets() {
       this.is_create_dialog_open = false
       let payload: CreateSecretPayload = {
         vault_id: this.$route.params.vault_id,
-        secret_name: this.secret_title
+        secret_name: this.secret_title,
+        secret_value:this.secret_value
       }
       store.dispatch("createSecret",payload).then(function(res) {
         console.log(res)
@@ -156,25 +181,41 @@ export default Vue.extend({
       })
     },
     getVaultName() {
-      for(let index in vaultStore.state.my_vaults){
+      for(let index in vaultStore.state.my_vaults) {
         if(vaultStore.state.my_vaults[index].id === this.$route.params.vault_id) {
           this.vault_name = vaultStore.state.my_vaults[index].toJSON().name
+          this.view_channel_id = vaultStore.state.my_vaults[index].toJSON().channel.objectId
         }
       }
+    },
+    readPassword() {
+      let self = this
+      let payload: ReadPasswordPayload = {
+        passTitle: this.view_password_title,
+        channelId: this.view_channel_id,
+        vaultId: this.$route.params.vault_id,
+        token: this.request_token,
+      }
+      store.dispatch('readPassword',payload).then(function(res){
+        console.log(res)
+        self.check_password_status = '请求成功'
+        self.read_password = res.data.data.value
+      })
     },
     initSocketWatcher() {
       let self = this
       store.dispatch('getAuthResult').then(function(res) {
         console.log(res)
-        self.check_password_status = 'Token已获取:'+res.auth.client_token
+        self.request_token = res.auth.client_token
         self.request_serial = res.request_id
+        self.check_password_status = '请求密码中'
+        self.readPassword()
       })
     }
   },
   created() {
     this.getSecrets()
     this.getVaultName()
-
   }
 });
 </script>

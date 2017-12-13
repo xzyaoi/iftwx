@@ -3,10 +3,10 @@ import * as types from '../mutation-types'
 import { Parse } from '../../apis/index'
 import { ParseUser }  from '../../models/user'
 import { Channel }  from '../../models/channel'
-import { Vault, Secret, CreateVaultPayload, CreateSecretPayload, RequestTokenPayload } from '../../models/vault'
+import { Vault, Secret, CreateVaultPayload, CreateSecretPayload, RequestTokenPayload, ReadPasswordPayload } from '../../models/vault'
 import user from './user'
 import channel from './channel'
-import { createPolicy } from '../../apis/vault.api'
+import { createPolicy, readPass, createPass } from '../../apis/vault.api'
 import { singleSocket } from '../../apis/socket'
 
 export interface State {
@@ -58,7 +58,7 @@ const actions: ActionTree<State, object> = {
               vault.set('isPublic', payload.is_public)
               vault.save(null, {
                 success: function(_vault: Vault) {
-                  createPolicy(_channel.id, payload.vault_name)
+                  createPolicy(_channel.id, _vault.id)
                   resolve(_vault)
                 },
                 error: function(err: Error) {
@@ -124,12 +124,17 @@ const actions: ActionTree<State, object> = {
         reject(new Error('user not logined'))
       }
       let vault_query = new Parse.Query(Vault)
-      vault_query.equalTo('objectId', payload.vault_id)
-      vault_query.find({
+      vault_query.get(payload.vault_id, {
         success: function(res: Vault) {
           let secret = new Secret()
           let createdBy = new ParseUser()
           let vault = new Vault()
+          console.log(payload)
+          console.log(payload.secret_name)
+          console.log(res.toJSON())
+          console.log(payload.vault_id)
+          console.log(payload.secret_value)
+          createPass(payload.secret_name,res.toJSON().channel.objectId,payload.vault_id, payload.secret_value)
           secret.set('vault', Vault)
           createdBy.set('id', user.state.current_user.id)
           vault.set('id', payload.vault_id)
@@ -138,6 +143,7 @@ const actions: ActionTree<State, object> = {
           secret.set('vault', vault)
           secret.save(null, {
             success: function(_secret: Secret) {
+              console.log('success')
               resolve(_secret)
             },
             error: function(err: Error) {
@@ -207,6 +213,13 @@ const actions: ActionTree<State, object> = {
     return new Promise((resolve, reject) => {
       singleSocket.receive('auth_progress_success').then(function(res: any){
         console.log(res)
+        resolve(res)
+      })
+    })
+  },
+  readPassword({commit}, payload:ReadPasswordPayload) {
+    return new Promise((resolve, reject) => {
+      readPass(payload.passTitle, payload.token,payload.vaultId,payload.channelId).then(function(res){
         resolve(res)
       })
     })

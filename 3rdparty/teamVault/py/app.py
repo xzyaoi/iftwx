@@ -39,9 +39,9 @@ def requestToken(data):
     vault_data = json.loads(vault_query_response.text)
     # Make Brief Intro
     brief_template = Templite("""
-        您好，{{username}} 正在申请 {{channelName}}/{{vaultName}} 的 {{secretName}}。
+        您好，{{username}} 正在申请 {{channelName}}/{{vaultId}} 的 {{secretName}}。
     """)
-    brief = brief_template.render({'username':user_data['results'][0]['nickName'], 'channelName':channel_data['results'][0]['name'], 'vaultName':vault_data['results'][0]['name'], 'secretName':secretName})
+    brief = brief_template.render({'username':user_data['results'][0]['nickName'], 'channelName':channel_data['results'][0]['name'], 'vaultId':vault_data['results'][0]['name'], 'secretName':secretName})
     
     # Send Socket ID and etc into Database for further Audit
     sessPayload = {
@@ -70,15 +70,12 @@ def createPassword():
     if request.method == 'POST':
         data = json.loads(request.data.decode('utf-8'))
         password = data['password']
-        vaultName = data['vaultName']
+        vaultId = data['vaultId']
         channelId = data['channelId']
         passtitle = data['passtitle']
-        token = data['token']
         v.logOut()
-        print(token)
-        v.auth(token)
-        v.writeSecret(channelId,vaultName,passtitle,password)
-        v.revokeToken(token)
+        v.loginWithDefaultToken()
+        v.writeSecret(channelId,vaultId,passtitle,password)
     return 'success'
 
 @app.route('/readPass', methods=['POST'])
@@ -86,13 +83,15 @@ def readPassword():
     passcode = ''
     if request.method == 'POST':
         data = json.loads(request.data.decode('utf-8'))
-        vaultName = data['vaultName']
+        vaultId = data['vaultId']
         channelId = data['channelId']
         passtitle = data['passtitle']
         token = data['token']
         v.logOut()
         v.auth(token)
-        passcode = v.readSecret(channelId, vaultName, passtitle)
+        passcode = v.readSecret(channelId, vaultId, passtitle)
+        print(passcode)
+        print(json.dumps(passcode))
         v.revokeToken(token)
     return json.dumps(passcode)
 
@@ -101,9 +100,9 @@ def createPolicy():
     if request.method == 'POST':
         data = json.loads(request.data.decode('utf-8'))
         channelId = data['channelId']
-        vaultName = data['vaultName']
+        vaultId = data['vaultId']
         v.loginWithDefaultToken()
-        v.createPolicy(channelId,vaultName)
+        v.createPolicy(channelId,vaultId)
     return 'success'
 
 # This Acquire Token API should only be called from Wechat or authorized user
@@ -115,9 +114,9 @@ def acquireToken():
     if request.method == 'POST':
         data = json.loads(request.data.decode('utf-8'))
         channelId = data['channelId']
-        vaultName = data['vaultName']
+        vaultId = data['vaultId']
         v.loginWithDefaultToken()
-        token = v.generateToken(channelId, vaultName)
+        token = v.generateToken(channelId, vaultId)
     return json.dumps(token)
 
 @app.route('/allowRequest', methods=['POST'])

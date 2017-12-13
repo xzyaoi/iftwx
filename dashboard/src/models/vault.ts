@@ -28,6 +28,7 @@ interface CreateVaultPayload {
 interface CreateSecretPayload {
   secret_name: string;
   vault_id: string;
+  secret_value: string;
 }
 
 interface RequestTokenPayload {
@@ -38,10 +39,18 @@ interface RequestTokenPayload {
   applyFrom: string;
 }
 
+interface ReadPasswordPayload {
+  passTitle: string;
+  token: string;
+  vaultId: string;
+  channelId: string;
+}
+
 export {
   Vault,
   Secret,
   CreateVaultPayload,
   CreateSecretPayload,
-  RequestTokenPayload
+  RequestTokenPayload,
+  ReadPasswordPayload
 }

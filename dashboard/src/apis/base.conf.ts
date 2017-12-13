@@ -39,7 +39,6 @@ let serviceParseToken: ParseToken = {
    * but the interface is exported only if you need to use.
    * Before you use it, you need to re-initialize the parse instance.
 let ztodoParseToken: ParseToken = {
-
   REQUEST_URL: 'https://cloud.yice.org.cn/ztodo/',
   APP_ID: 'ztodo-app-id'
 }
