@@ -1,7 +1,7 @@
 #coding:utf-8
-VAULT_URL = 'http://localhost:8200'
-ROOT_TOKEN = 'c720ce1a-6537-7ebf-0a15-0583f12b4f56'
-UNSEAL_KEY = '6GOYrElj44jPwWpYRDBMBCPx99SpUOyui+2vColo8Mw='
+VAULT_URL = 'http://wechat.zhitantech.com:8200'
+ROOT_TOKEN = "648e1254-b873-dd67-73b9-0a81401020e4"
+UNSEAL_KEY = "lFi7ehveB7b7+smaqX4Yl3nm2XUe6KPoXVQdieVdORk="
 
 base_url = 'https://cloud.yice.org.cn/zhulijun/classes/'
 user_request_url = base_url +'_User'

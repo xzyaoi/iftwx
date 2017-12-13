@@ -1,7 +1,7 @@
 import * as socketIo from 'socket.io-client'
 import { SocketMessage } from '../models/socketMessage'
 
-let SERVER_URL = 'http://localhost:5000'
+let SERVER_URL = 'https://ztvault.herokuapp.com/'
 
 
 class SocketService {

@@ -4,7 +4,9 @@ gunicorn
 requests
 hvac
 gevent
-flask-socketio
+Flask-SocketIO==2.8.2
+python-engineio==1.1.0
+python-socketio==1.6.1
 gevent-websocket
 eventlet
 flask-cors
