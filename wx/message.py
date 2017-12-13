@@ -61,7 +61,6 @@ class WechatMessage(object):
                         return self.text_reply('你发来的消息: %s , 我暂时无法理解哦' % self.message.content)
             except Exception,e:
                 traceback.print_exc()
-                print repr(e)
                 pass
             return self.text_reply('你发来的消息: %s , 我暂时无法理解哦' % self.message.content)
 
@@ -71,12 +70,14 @@ class WechatMessage(object):
             '理 \n'
             '君'
         )
+
     def handle_subscribe_scan_event(self):
         from channel import add_follower
         channelId = self.message.scene_id
         openid = self.message.source
         channel_name=add_follower(openid,channelId)
         return self.text_reply('您已订阅%s频道' % channel_name)
+
     def handle_scan_event(self):
         from channel import add_follower
         channelId = self.message.scene_id
@@ -123,7 +124,6 @@ def handle_template(appId,channelId,content,miniProgram=None,url=None):
     receiver = channel.follower
     for each in receiver:
         result = send_template_message.delay(each,templateId,content,url,miniProgram)
-        print result
     # Unpack Content
     # Queue it
     return 'success'
@@ -143,5 +143,4 @@ def handle_plain_msg(appId,channelId,content):
     receiver = channel.follower
     for each in receiver:
         result = send_plain_message.delay(each, content)
-        print result
     return 'success'

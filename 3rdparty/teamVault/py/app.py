@@ -15,7 +15,6 @@ app = Flask(__name__)
 socketio = SocketIO(app)
 CORS(app)
 
-
 @socketio.on('requestToken')
 def requestToken(data):
     data = data['data']
@@ -140,6 +139,7 @@ def allowRequest():
         sess_modify_data = json.dumps(sess_modify_data).replace("'",'"')
         res = requests.put(config.sess_request_url+'/'+sess_data['results'][0]['objectId'],headers = config.request_headers,data = sess_modify_data)
         # Fetch Token from Vault
+        print(res)
         # Send socket info to client
         return 'success'
 

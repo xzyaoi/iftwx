@@ -8,3 +8,4 @@ flask-socketio
 gevent-websocket
 eventlet
 flask-cors
+wxpusher
