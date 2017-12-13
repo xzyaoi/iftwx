@@ -33,8 +33,8 @@ class Vault(metaclass=Singleton):
     def isAuthenticated(self):
         return self.client.is_authenticated()
 
-    def writeSecret(self, channelId, vaultName, secretName, secret, lease=None):
-        pname = self.getPolicyName(channelId, vaultName)
+    def writeSecret(self, channelId, vaultId, secretName, secret, lease=None):
+        pname = self.getPolicyName(channelId, vaultId)
         try:
             if lease is None:
                 self.client.write(pname+'/'+secretName,value=secret,lease='1h')
@@ -47,9 +47,9 @@ class Vault(metaclass=Singleton):
     def deleteSecret(self, name):
         self.client.delete(name)
 
-    def readSecret(self,channelId, vaultName, secretName):
+    def readSecret(self,channelId, vaultId, secretName):
         try:
-            pname = self.getPolicyName(channelId, vaultName)
+            pname = self.getPolicyName(channelId, vaultId)
             print(pname+'/'+secretName)
             return self.client.read(pname+'/'+secretName)
         except:
@@ -58,31 +58,31 @@ class Vault(metaclass=Singleton):
                 'reason': 'Denied'
             }
 
-    def getPolicyName(self, channelId, vaultName):
-        return 'secret/'+channelId+'/'+vaultName
+    def getPolicyName(self, channelId, vaultId):
+        return 'secret/'+channelId+'/'+vaultId
 
-    def createPolicy(self, channelId, vaultName):
+    def createPolicy(self, channelId, vaultId):
         template = Templite("""
             path "sys" {
                 policy = "deny"
             }
 
-            path "secret/{{channelId}}/{{vaultName}}/*" {
+            path "secret/{{channelId}}/{{vaultId}}/*" {
                 policy = "write"
             }
 
-            path "secret/{{channelId}}/{{vaultName}}/*" {
+            path "secret/{{channelId}}/{{vaultId}}/*" {
                 policy = "read"
             }
         """)
-        t = template.render({"channelId":channelId, "vaultName":vaultName})
-        self.client.set_policy(self.getPolicyName(channelId,vaultName), t)
+        t = template.render({"channelId":channelId, "vaultId":vaultId})
+        self.client.set_policy(self.getPolicyName(channelId,vaultId), t)
 
-    def deletePolicy(self,channelId,vaultName):
-        self.client.delete_policy(self.getPolicyName(channelId,vaultName))
+    def deletePolicy(self,channelId,vaultId):
+        self.client.delete_policy(self.getPolicyName(channelId,vaultId))
 
-    def getPolicy(self, channelId, vaultName, needParse):
-        return self.client.get_policy(self.getPolicyName(channelId,vaultName), parse=needParse)
+    def getPolicy(self, channelId, vaultId, needParse):
+        return self.client.get_policy(self.getPolicyName(channelId,vaultId), parse=needParse)
     
     def isSealed(self):
         return self.client.is_sealed()
@@ -93,8 +93,8 @@ class Vault(metaclass=Singleton):
     def unseal(self, token):
         self.client.unseal(token)
 
-    def generateToken(self,channelId,vaultName,lease="1h"):
-        return self.client.create_token(policies=[self.getPolicyName(channelId,vaultName)], lease=lease)
+    def generateToken(self,channelId,vaultId,lease="1h"):
+        return self.client.create_token(policies=[self.getPolicyName(channelId,vaultId)], lease=lease)
 
     def revokeToken(self,token):
         self.client.token = config.ROOT_TOKEN

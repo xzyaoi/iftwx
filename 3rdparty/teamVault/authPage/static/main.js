@@ -90,21 +90,17 @@ function authPasskey() {
         type: "POST",
         url: auth_key_url,
         contentType: 'application/json',
-        data: JSON.stringify({'sessId': sessId, 'userId': userId}),
+        data: JSON.stringify({ 'sessId': sessId, 'userId': userId }),
         dataType: 'json',
         timeout: 300,
-        success:function(data) {
-            console.log(data)
+        success: function(data) {
+            location.href = './success.html?userId=' + userId + '&sessId=' + sessId
         }
     })
 }
 
 function denyPasskey() {
-    if (socket === null) {
-        console.error('socket has not been initialized.')
-        return;
-    }
-    socket.emit('auth_denied', { data: '123' })
+    location.href = './success.html?userId=' + userId + '&sessId=' + sessId
 }
 
 function getOpenId() {
@@ -126,6 +122,8 @@ function getRequestDetail(sessId) {
         success: function(result) {
             var pojo_result = result.toJSON()
             console.log(pojo_result)
+            document.getElementById('apply_info').innerHTML = document.getElementById('apply_info').innerHTML.replace('{username}', pojo_result.appliance.nickName)
+            document.getElementById('apply_by').innerHTML = document.getElementById('apply_by').innerHTML.replace('{username}', pojo_result.appliance.nickName)
             document.getElementById('apply_info').innerHTML = document.getElementById('apply_info').innerHTML.replace('{secretName}', pojo_result.secretName)
             document.getElementById('acc_info').innerHTML = document.getElementById('acc_info').innerHTML.replace('{channelName}', pojo_result.channel.name)
             document.getElementById('acc_info').innerHTML = document.getElementById('acc_info').innerHTML.replace('{vaultName}', pojo_result.vault.name)

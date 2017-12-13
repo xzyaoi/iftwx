@@ -4,7 +4,7 @@ import { SocketMessage } from '../models/socketMessage'
 let SERVER_URL = 'http://localhost:5000'
 
 
-export class SocketService {
+class SocketService {
   private socket:any;
 
   constructor() {
@@ -19,7 +19,7 @@ export class SocketService {
       this.socket.emit(messageName, message);
   }
 
-  public get(messageName:string) {
+  public receive(messageName:string) {
     return new Promise((resolve, reject)=>{
       this.socket.on(messageName,(data:any)=>{
         resolve(data)
@@ -27,3 +27,7 @@ export class SocketService {
     })
   }
 }
+
+let singleSocket = new SocketService()
+
+export { singleSocket }

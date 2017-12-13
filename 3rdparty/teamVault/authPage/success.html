@@ -6,8 +6,15 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="keywords" content="Team Vault">
     <meta name="description" content="Team Vault">
-    <title>密钥读取请求</title>
+    <title>已允许读取</title>
     <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
+    <link rel="stylesheet" href="./static/main.css">
+    <script src="https://cdn.staticfile.org/socket.io/1.7.3/socket.io.min.js"></script>
+    <script src="https://cdn.staticfile.org/zepto/1.0rc1/zepto.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="https://cdn.staticfile.org/parse/1.9.2/parse.min.js"></script>
+    <script src="./static/main.js"></script>
+
     <style>
         body {
             background-color: #efeff4;
@@ -28,44 +35,41 @@
             <div class="weui-msg">
                 <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
                 <div class="weui-msg__text-area">
-                    <h2 class="weui-msg__title">操作成功</h2>
-                    <p class="weui-msg__desc">内容详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<a href="javascript:void(0);">文字链接</a></p>
+                    <h2 class="weui-msg__title">成功</h2>
+                    <p class="weui-msg__desc" id="apply_info">您已
+                        <B>允许</B> {username} 申请读取的 {secretName}</p>
                 </div>
-                <div class="weui-cells__title">带图标、说明的列表项</div>
                 <div class="weui-cells">
-                    <div class="weui-cell">
-                        <div class="weui-cell__hd"><img src="..." alt="" style="width:20px;margin-right:5px;display:block"></div>
+                    <div class="weui-cell cell-item-left">
                         <div class="weui-cell__bd">
-                            <p>标题文字</p>
+                            <p id="apply_by">申请人：{username}</p>
                         </div>
-                        <div class="weui-cell__ft">说明文字</div>
                     </div>
-                    <div class="weui-cell">
-                        <div class="weui-cell__hd"><img src="..." alt="" style="width:20px;margin-right:5px;display:block"></div>
+                    <div class="weui-cell cell-item-left">
                         <div class="weui-cell__bd">
-                            <p>标题文字</p>
+                            <p>授权时长：1小时</p>
                         </div>
-                        <div class="weui-cell__ft">说明文字</div>
+                    </div>
+                    <div class="weui-cell cell-item-left">
+                        <div class="weui-cell__bd">
+                            <p id="acc_info">授权账号：{channelName}/{vaultName}</p>
+                        </div>
                     </div>
                 </div>
-                <div class="weui-msg__opr-area">
-                    <p class="weui-btn-area">
-                        <a href="javascript:history.back();" class="weui-btn weui-btn_primary">推荐操作</a>
-                        <a href="javascript:history.back();" class="weui-btn weui-btn_default">辅助操作</a>
-                    </p>
-                </div>
-                <div class="weui-msg__extra-area">
-                    <div class="weui-footer">
-                        <p class="weui-footer__links">
-                            <a href="javascript:void(0);" class="weui-footer__link">底部链接文本</a>
-                        </p>
-                        <p class="weui-footer__text">Copyright &copy; 2015-2017 Team Vault</p>
-                    </div>
+            </div>
+            <div class="weui-msg__extra-area">
+                <div class="weui-footer">
+                    <p class="weui-footer__text">Copyright &copy; 2015-2017 Team Vault</p>
                 </div>
             </div>
         </div>
 
     </div>
 </body>
+<footer>
+    <script>
+        bootstrap()
+    </script>
+</footer>
 
 </html>

@@ -39,7 +39,7 @@ def requestToken(data):
     vault_data = json.loads(vault_query_response.text)
     # Make Brief Intro
     brief_template = Templite("""
-        您好，{{username}} 正在申请 {{channelName}}/{{vaultName}} 的 {{secretName}}。 请查看。
+        您好，{{username}} 正在申请 {{channelName}}/{{vaultName}} 的 {{secretName}}。
     """)
     brief = brief_template.render({'username':user_data['results'][0]['nickName'], 'channelName':channel_data['results'][0]['name'], 'vaultName':vault_data['results'][0]['name'], 'secretName':secretName})
     
@@ -139,9 +139,13 @@ def allowRequest():
         sess_modify_data = json.dumps(sess_modify_data).replace("'",'"')
         res = requests.put(config.sess_request_url+'/'+sess_data['results'][0]['objectId'],headers = config.request_headers,data = sess_modify_data)
         # Fetch Token from Vault
-        print(res)
+        print(sess_data)
+        v.loginWithDefaultToken()
+        token = v.generateToken(sess_data['results'][0]['channel']['objectId'], sess_data['results'][0]['vault']['objectId'])
         # Send socket info to client
-        return 'success'
+        print(token)
+        socketio.emit('auth_progress_success', token, room=sessId)
+        return json.dumps(token)
 
 @app.route('/denyRequest', methods=['POST'])
 def denyRequest():

@@ -10,6 +10,7 @@
           <v-layout row fluid justify-center>
             <v-progress-circular indeterminate v-bind:size="70" v-bind:width="3" color="primary"></v-progress-circular>
             <p>{{ check_password_status }}</p>
+            <p v-if=" request_serial!=='' ">请求序号：{{ request_serial }}</p>
           </v-layout>
         </v-card-text>
         <v-card-actions>
@@ -104,6 +105,7 @@ export default Vue.extend({
     select_items: [],
     select_items_name:[],
     check_password_status: "申请中",
+    request_serial:'',
     selected_channel: "",
     is_create_dialog_open : false,
     is_request_dialog_open : false,
@@ -132,6 +134,7 @@ export default Vue.extend({
     },
     viewPassword(objectId: string) {
       this.is_request_dialog_open = true
+      this.initSocketWatcher()
       store.dispatch('applyForSecret',objectId)
     },
     submitSecrets() {
@@ -158,11 +161,20 @@ export default Vue.extend({
           this.vault_name = vaultStore.state.my_vaults[index].toJSON().name
         }
       }
+    },
+    initSocketWatcher() {
+      let self = this
+      store.dispatch('getAuthResult').then(function(res) {
+        console.log(res)
+        self.check_password_status = 'Token已获取:'+res.auth.client_token
+        self.request_serial = res.request_id
+      })
     }
   },
   created() {
     this.getSecrets()
     this.getVaultName()
+
   }
 });
 </script>

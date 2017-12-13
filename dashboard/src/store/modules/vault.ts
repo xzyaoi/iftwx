@@ -7,7 +7,7 @@ import { Vault, Secret, CreateVaultPayload, CreateSecretPayload, RequestTokenPay
 import user from './user'
 import channel from './channel'
 import { createPolicy } from '../../apis/vault.api'
-import { SocketService } from '../../apis/socket'
+import { singleSocket } from '../../apis/socket'
 
 export interface State {
     my_vaults: Array<Vault>;
@@ -174,19 +174,16 @@ const actions: ActionTree<State, object> = {
   },
 
   applyForSecret({commit}, secretId:string) {
-    let socket = new SocketService()
     let secret_query = new Parse.Query(Secret)
     secret_query.include("vault")
     secret_query.get(secretId,{
       success:function(res:any) {
         let pojo_res = res.toJSON()
-        console.log(pojo_res)
         let vault_query = new Parse.Query(Vault)
         vault_query.include('createdBy')
         vault_query.get(pojo_res.vault.objectId,{
           success: function(vault:any) {
             let pojo_vault = vault.toJSON()
-            console.log(pojo_vault)
             let payload:RequestTokenPayload = {
               secret_name: pojo_res.name,
               reviewerWxId: pojo_vault.createdBy.wxOpenId,
@@ -194,7 +191,7 @@ const actions: ActionTree<State, object> = {
               vaultId: pojo_vault.objectId,
               applyFrom: user.state.current_user.id,
             }
-            socket.send("requestToken",{data:payload})
+            singleSocket.send("requestToken",{data:payload})
           },
           error:function(err: Error) {
             console.error(err)
@@ -204,6 +201,14 @@ const actions: ActionTree<State, object> = {
       error:function(err: Error) {
         console.error(err)
       }
+    })
+  },
+  getAuthResult({commit}) {
+    return new Promise((resolve, reject) => {
+      singleSocket.receive('auth_progress_success').then(function(res: any){
+        console.log(res)
+        resolve(res)
+      })
     })
   }
 }

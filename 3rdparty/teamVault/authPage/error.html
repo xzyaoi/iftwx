@@ -1,0 +1,75 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="keywords" content="Team Vault">
+    <meta name="description" content="Team Vault">
+    <title>已允许读取</title>
+    <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
+    <link rel="stylesheet" href="./static/main.css">
+    <script src="https://cdn.staticfile.org/socket.io/1.7.3/socket.io.min.js"></script>
+    <script src="https://cdn.staticfile.org/zepto/1.0rc1/zepto.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="https://cdn.staticfile.org/parse/1.9.2/parse.min.js"></script>
+    <script src="./static/main.js"></script>
+
+    <style>
+        body {
+            background-color: #efeff4;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container" class="container">
+        <div class="page">
+            <div class="weui-msg">
+                <div class="weui-msg__icon-area"><i class="weui-icon-info weui-icon_msg"></i></div>
+                <div class="weui-msg__text-area">
+                    <h2 class="weui-msg__title">操作成功</h2>
+                    <p class="weui-msg__desc" id="apply_info">您已
+                        <B>拒绝</B> {username} 申请读取的 {secretName}</p>
+                </div>
+                <div class="weui-cells">
+                    <div class="weui-cell cell-item-left">
+                        <div class="weui-cell__bd">
+                            <p id="apply_by">申请人：{username}</p>
+                        </div>
+                    </div>
+                    <div class="weui-cell cell-item-left">
+                        <div class="weui-cell__bd">
+                            <p>授权时长：1小时</p>
+                        </div>
+                    </div>
+                    <div class="weui-cell cell-item-left">
+                        <div class="weui-cell__bd">
+                            <p id="acc_info">授权账号：{channelName}/{vaultName}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-msg__extra-area">
+                <div class="weui-footer">
+                    <p class="weui-footer__text">Copyright &copy; 2015-2017 Team Vault</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+<footer>
+    <script>
+        bootstrap()
+    </script>
+</footer>
+
+</html>
