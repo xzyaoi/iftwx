@@ -1,0 +1,11 @@
+{
+  "name": "wxpusher",
+  "version": "0.0.1",
+  "description": "The Zhulijun Node.js Client",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Xiaozhe Yaoi",
+  "license": "GPL-3.0"
+}
